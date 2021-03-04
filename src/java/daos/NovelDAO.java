@@ -35,7 +35,7 @@ public class NovelDAO {
                 while(rs.next()){
                     String novelID = rs.getString("novelID");
                     String tags = rs.getString("tags");
-                    String novelName = rs.getString("novelName");
+                    String novelName = rs.getString("name");
                     int views = rs.getInt("views");
                     String author = rs.getString("author");
                     Date uploadDate = rs.getDate("uploadDate");
