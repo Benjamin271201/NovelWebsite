@@ -33,8 +33,8 @@ public class AccountDAO {
                     String email = rs.getString("email");
                     String name = rs.getString("name");
                     boolean isAdmin = Boolean.parseBoolean(rs.getString("isAdmin"));
-                    
-                    Account acc = new Account(user, password, email, name, isAdmin);
+                    String avatarURL = rs.getString("avatarURL");
+                    Account acc = new Account(user, password, email, name, isAdmin, avatarURL);
                     return acc;
                 }
             }

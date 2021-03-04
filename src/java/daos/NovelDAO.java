@@ -34,22 +34,14 @@ public class NovelDAO {
                 rs = ps.executeQuery();
                 while(rs.next()){
                     String novelID = rs.getString("novelID");
-                    String tags = rs.getString("tags");
                     String novelName = rs.getString("name");
                     int views = rs.getInt("views");
                     String author = rs.getString("author");
                     Date uploadDate = rs.getDate("uploadDate");
+                    String coverURL = rs.getString("coverURL");
                     AccountDAO accDAO = new AccountDAO();
                     Account acc = accDAO.getAccountByUsername(author);
-                    TagDAO tagDAO = new TagDAO();
-                    String[] tagArray = tags.split(",");
-                    ArrayList<Tag> tagList = new ArrayList<>();
-                    for(int i=0; i<tagArray.length; i++){
-                        Tag tag = new Tag();
-                        tag = tagDAO.getTagsByID(tagArray[i]);
-                        tagList.add(tag);
-                    }
-                    Novel n = new Novel(novelID,tagList , novelName, views, acc, uploadDate);
+                    Novel n = new Novel(novelID, novelName, views, acc, uploadDate, coverURL);
                     lst.add(n);
                 }
             }
@@ -69,10 +61,6 @@ public class NovelDAO {
         for (Novel novel : lst) {
             System.out.println(novel.getNovelID());
             System.out.println(novel.getAuthor().getName());
-            for (Tag t : novel.getTags()) {
-                System.out.println(t.getTagID());
-                System.out.println(t.getTagName());
-            }
         }
     }
 }

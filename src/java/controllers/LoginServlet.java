@@ -51,8 +51,7 @@ public class LoginServlet extends HttpServlet {
             }
             else{
                 HttpSession session = request.getSession();
-                Account user = dao.getAccountByUsername(username);
-                session.setAttribute("activeAccount", user);
+                session.setAttribute("username", username);
                 response.sendRedirect("NovelServlet");
             }
         }

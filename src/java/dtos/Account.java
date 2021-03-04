@@ -15,17 +15,19 @@ public class Account {
     private String email;
     private String name;
     private boolean isAdmin;
+    private String avatarURL;
     
     public Account(){
         
     }
 
-    public Account(String username, String password, String email, String name, boolean isAdmin) {
+    public Account(String username, String password, String email, String name, boolean isAdmin, String avatarURL) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.name = name;
         this.isAdmin = isAdmin;
+        this.avatarURL = avatarURL;
     }
 
     public String getUsername() {
@@ -66,6 +68,14 @@ public class Account {
 
     public void setIsAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
+    }
+
+    public String getAvatarURL() {
+        return avatarURL;
+    }
+
+    public void setAvatarURL(String avatarURL) {
+        this.avatarURL = avatarURL;
     }
     
     

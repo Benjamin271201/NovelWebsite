@@ -14,21 +14,21 @@ import java.util.ArrayList;
  */
 public class Novel {
     private String novelID;
-    private ArrayList<Tag> tags;
     private String novelName;
     private int viewCount;
     private Account author;
     private Date uploadDate;
+    private String coverURL;
 
     public Novel(){}
-    
-    public Novel(String novelID, ArrayList<Tag> tags, String novelName, int viewCount, Account author, Date uploadDate) {
+
+    public Novel(String novelID, String novelName, int viewCount, Account author, Date uploadDate, String coverURL) {
         this.novelID = novelID;
-        this.tags = tags;
         this.novelName = novelName;
         this.viewCount = viewCount;
         this.author = author;
         this.uploadDate = uploadDate;
+        this.coverURL = coverURL;
     }
 
     public String getNovelID() {
@@ -37,14 +37,6 @@ public class Novel {
 
     public void setNovelID(String novelID) {
         this.novelID = novelID;
-    }
-
-    public ArrayList<Tag> getTags() {
-        return tags;
-    }
-
-    public void setTags(ArrayList<Tag> tags) {
-        this.tags = tags;
     }
 
     public String getNovelName() {
@@ -78,7 +70,14 @@ public class Novel {
     public void setUploadDate(Date uploadDate) {
         this.uploadDate = uploadDate;
     }
-    
+
+    public String getCoverURL() {
+        return coverURL;
+    }
+
+    public void setCoverURL(String coverURL) {
+        this.coverURL = coverURL;
+    }
     
     
 }
