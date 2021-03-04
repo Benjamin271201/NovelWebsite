@@ -5,24 +5,25 @@
  */
 package controllers;
 
-import daos.AccountDAO;
-import dtos.Account;
+import daos.NovelDAO;
+import dtos.Novel;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author ASUS GAMING
+ * @author chiuy
  */
-public class LoginServlet extends HttpServlet {
+public class NovelServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,27 +35,16 @@ public class LoginServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException, ClassNotFoundException {
+            throws ServletException, IOException, ClassNotFoundException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        String action = request.getParameter("action");
+       String action = request.getParameter("action");
+       PrintWriter out = response.getWriter();
         if(action == null){
-            response.sendRedirect("loginForm.html");
-        }
-        else if(action.equals("login")){
-            String username = request.getParameter("username");
-            String pass = request.getParameter("password");
-            AccountDAO dao = new AccountDAO();
-            boolean isValid = dao.checkLogin(username, pass);
-            if(isValid == false){
-                response.sendRedirect("loginForm.html");
-            }
-            else{
-                HttpSession session = request.getSession();
-                Account user = dao.getAccountByUsername(username);
-                session.setAttribute("activeAccount", user);
-                response.sendRedirect("NovelServlet");
-            }
+            NovelDAO nDAO = new NovelDAO();
+            ArrayList<Novel> novelList = nDAO.getAllNovels();
+            request.setAttribute("novelListObj", novelList);
+            RequestDispatcher rd = request.getRequestDispatcher("NovelList.jsp");
+            rd.forward(request, response);
         }
     }
 
@@ -72,12 +62,11 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NovelServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(NovelServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-     
     }
 
     /**
@@ -93,10 +82,10 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NovelServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(NovelServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
