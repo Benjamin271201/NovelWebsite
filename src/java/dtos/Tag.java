@@ -9,7 +9,7 @@ package dtos;
  *
  * @author chiuy
  */
-public class Tag {
+public class Tag implements Comparable<Tag>{
     private String tagID;
     private String tagName;
     
@@ -34,6 +34,11 @@ public class Tag {
 
     public void setTagName(String tagName) {
         this.tagName = tagName;
+    }
+
+    @Override
+    public int compareTo(Tag obj) {
+        return tagName.compareTo(obj.tagName);
     }
     
     

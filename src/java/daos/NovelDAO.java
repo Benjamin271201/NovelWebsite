@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * @author chiuy
  */
 public class NovelDAO {
-    public ArrayList<Novel> getAllNovels() throws ClassNotFoundException, SQLException{
+    public ArrayList<Novel> getAllNovels() {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -46,21 +46,61 @@ public class NovelDAO {
                 }
             }
         }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         finally{
-            if(rs != null) rs.close();
-            if(ps != null) ps.close();
-            if(con != null) con.close();
+            try {
+                if(rs != null) rs.close();
+                if(ps != null) ps.close();
+                if(con != null) con.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return lst;
     }
     
-    public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        NovelDAO dao = new NovelDAO();
-        ArrayList<Novel> lst = new ArrayList<>();
-        lst = dao.getAllNovels();
-        for (Novel novel : lst) {
-            System.out.println(novel.getNovelID());
-            System.out.println(novel.getAuthor().getName());
+    //  get a novel based on novelID
+    public Novel getNovel(String novelID) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        String sql = "SELECT * FROM Novel WHERE novelID=?";
+        try{
+            con = DBConnect.makeConnection();
+            if(con != null){
+                ps = con.prepareStatement(sql);
+                ps.setString(1, novelID);
+                rs = ps.executeQuery();
+                if(rs.next()){
+                    String novelName = rs.getString("name");
+                    int views = rs.getInt("views");
+                    String author = rs.getString("author");
+                    Date uploadDate = rs.getDate("uploadDate");
+                    String coverURL = rs.getString("coverURL");
+                    AccountDAO accDAO = new AccountDAO();
+                    Account acc = accDAO.getAccountByUsername(author);
+                    Novel n = new Novel(novelID, novelName, views, acc, uploadDate, coverURL);
+                    return n;
+                }
+            }
         }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally{
+            try {
+                if(rs != null) rs.close();
+                if(ps != null) ps.close();
+                if(con != null) con.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }

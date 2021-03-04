@@ -5,8 +5,12 @@
  */
 package controllers;
 
+import daos.AccountDAO;
 import daos.NovelDAO;
+import daos.TagDAO;
+import dtos.Account;
 import dtos.Novel;
+import dtos.Tag;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -35,15 +39,34 @@ public class NovelServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, ClassNotFoundException, SQLException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-       String action = request.getParameter("action");
-       PrintWriter out = response.getWriter();
+        
+        String info = "novel_info.jsp";
+        String action = request.getParameter("a");
+        PrintWriter out = response.getWriter();
+        NovelDAO nDAO = new NovelDAO();
+        TagDAO tDAO = new TagDAO();
+        AccountDAO aDao = new AccountDAO();
+        RequestDispatcher rd = null;
+        
+        //  a == null -> display website (index.jsp)
         if(action == null){
-            NovelDAO nDAO = new NovelDAO();
             ArrayList<Novel> novelList = nDAO.getAllNovels();
             request.setAttribute("novelListObj", novelList);
-            RequestDispatcher rd = request.getRequestDispatcher("NovelList.jsp");
+            rd = request.getRequestDispatcher("index.jsp");
+            rd.forward(request, response);
+        }
+        
+        // a == novel_info -> display novel info
+        else if (action.equals("novel_info")) {
+            String novelID = (String) request.getParameter("n");
+            ArrayList<Tag> tagList = tDAO.getTagList(novelID);
+            Novel novelInfo = nDAO.getNovel(novelID);
+            rd = request.getRequestDispatcher(info);
+            request.setAttribute("taglist", tagList);
+            System.out.println(tagList);
+            request.setAttribute("novel", novelInfo);
             rd.forward(request, response);
         }
     }
@@ -60,13 +83,7 @@ public class NovelServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(NovelServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(NovelServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -80,13 +97,7 @@ public class NovelServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(NovelServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(NovelServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**

@@ -18,7 +18,9 @@ import java.util.ArrayList;
  * @author chiuy
  */
 public class TagDAO {
-    public Tag getTagsByID(String tagID) throws ClassNotFoundException, SQLException{
+    
+    //  get tag name based on tagID
+    public Tag getTag(String tagID) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -32,24 +34,62 @@ public class TagDAO {
                 while(rs.next()){
                     String tagid = rs.getString("tagID");
                     String tagName = rs.getString("tagName");
-                    
                     Tag tag = new Tag(tagid, tagName);
                     return tag;
                 }
             }
             
         }
-        finally{
-            if(rs != null) rs.close();
-            if(ps != null) ps.close();
-            if(con != null) con.close();
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            try{
+                if(rs != null) rs.close();
+                if(ps != null) ps.close();
+                if(con != null) con.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
-    
-    public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        TagDAO dao = new TagDAO();
-        Tag tag = dao.getTagsByID("01");
-        System.out.println(tag.getTagName());
+
+    //  get tag list of a novel
+    public ArrayList<Tag> getTagList(String novelID) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<Tag> tagList = new ArrayList<>();
+        String sql = "SELECT * FROM TagMap WHERE novelID=?";
+        try {
+            con = DBConnect.makeConnection();
+            if(con != null){
+                ps = con.prepareStatement(sql);
+                ps.setString(1, novelID);
+                rs = ps.executeQuery();
+                while(rs.next()){
+                    String tagID = rs.getString("tagID");
+                    Tag tag = getTag(tagID);
+                    tagList.add(tag);
+                }
+                return tagList;
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs != null) rs.close();
+                if(ps != null) ps.close();
+                if(con != null) con.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }
