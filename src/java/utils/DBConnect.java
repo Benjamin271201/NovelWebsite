@@ -15,7 +15,7 @@ import java.sql.SQLException;
  */
 public class DBConnect {
     
-    public static Connection MakeConnection() {
+    public static Connection makeConnection() {
         try {
             //  TDBC Native Protocol
             // 1
