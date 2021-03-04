@@ -20,9 +20,9 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author ASUS GAMING
+ * @author chiuy
  */
-public class LoginServlet extends HttpServlet {
+public class RegisterServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,38 +34,46 @@ public class LoginServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException, ClassNotFoundException {
+            throws ServletException, IOException, ClassNotFoundException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        String action = request.getParameter("action");
-        
-        //if a==null -> redirect to login_form.jsp
-        if(action == null){
-            response.sendRedirect("login_form.jsp");
-        }
-        
-        //if a = login
-        else if(action.equals("login")){
-            String username = request.getParameter("username");
-            String pass = request.getParameter("password");
-            AccountDAO dao = new AccountDAO();
-            
-            //check login
-            boolean isValid = dao.checkLogin(username, pass);
-            
-            //if isValid = false -> setAttribute("success", isValid) and dispatch to login_form.jsp
-            if(isValid == false){
-                request.setAttribute("success", isValid);
-                request.getRequestDispatcher("login_form.jsp").forward(request, response);
-            }
-            
-            //else redirect to NovelServlet
-            else{
-                HttpSession session = request.getSession();
-                session.setAttribute("username", username);
-                response.sendRedirect("NovelServlet");
-            }
-        }
+       String action = request.getParameter("action");
+       
+       //if a==null -> redirect to register_form.html
+       if(action == null){
+           response.sendRedirect("register_form.jsp");
+       }
+       
+       //if a.equals("register") 
+       else if(action.equals("register")){
+           String username = request.getParameter("username");
+           String password = request.getParameter("password");
+           String email = request.getParameter("email");
+           String name = request.getParameter("name");
+           String avatarURL = request.getParameter("avatar");
+           
+           //search for duplicated username in database
+           AccountDAO dao = new AccountDAO();
+           Account foundAccount = dao.getAccountByUsername(username);
+           
+           //if foundAccount!= null -> dispatch to register_form, keep all inputted values except password
+           if(foundAccount != null){
+               request.setAttribute("username", username);
+               request.setAttribute("email", email);
+               request.setAttribute("name", name);
+               request.setAttribute("avatar", avatarURL);
+               request.getRequestDispatcher("register_form.jsp").forward(request, response);
+           }
+           
+           //else -> add account to database, set session, then redirect to NovelServlet
+           else{
+               Account newAccount = new Account(username, password, email, name, false, avatarURL);
+               AccountDAO aDAO = new AccountDAO();
+               aDAO.addAccount(newAccount);
+               HttpSession session = request.getSession();
+               session.setAttribute("username", newAccount.getUsername());
+               response.sendRedirect("NovelServlet");
+           }
+       }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -82,12 +90,11 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RegisterServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(RegisterServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-     
     }
 
     /**
@@ -103,10 +110,10 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RegisterServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(RegisterServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

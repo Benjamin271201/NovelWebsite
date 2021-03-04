@@ -40,11 +40,20 @@ public class AccountDAO {
             }
            
         }
-        finally{
-            if(rs != null) rs.close();
-            if(ps != null) ps.close();
-            if(con != null) con.close();
+        catch(Exception e){
+            e.printStackTrace();
         }
+        finally{
+            try{
+                if(rs != null) rs.close();
+                if(ps != null) ps.close();
+                if(con != null) con.close();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+        }
+    }
+           
         return null;
     }
     
@@ -68,6 +77,42 @@ public class AccountDAO {
                 }
                 return false;
        }
+    
+    public boolean addAccount(Account a){
+        Connection con = null;
+        PreparedStatement ps = null;
+        String sql = "INSERT INTO Account(username, email, password, name, isAdmin,avatarURL)"
+                + "VALUES(?, ?, ?, ?, ?, ?)";
+        try {
+            con = DBConnect.makeConnection();
+            if(con != null){
+                ps = con.prepareStatement(sql);
+                ps.setString(1, a.getUsername());
+                ps.setString(2, a.getEmail());
+                ps.setString(3, a.getPassword());
+                ps.setString(4, a.getName());
+                ps.setString(5, "false");
+                ps.setString(6, a.getAvatarURL());
+                
+                ps.executeUpdate();
+                return true;
+            }
+        } 
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        finally{
+            try {
+                if(ps != null) ps.close();
+                if(con != null) con.close();
+            } 
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
     
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         AccountDAO dao = new AccountDAO();
