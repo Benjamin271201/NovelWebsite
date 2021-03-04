@@ -48,6 +48,27 @@ public class AccountDAO {
         return null;
     }
     
+    public boolean checkLogin(String username, String password) throws SQLException, ClassNotFoundException {
+                Connection con = null;
+                PreparedStatement pstm = null;
+                ResultSet rs = null;
+                String url = "select * from Account where username=? and password=?";
+                
+                con = DBConnect.makeConnection();
+                try {
+                        if(con != null) {
+                                pstm = con.prepareStatement(url);
+                                pstm.setString(1, username);
+                                pstm.setString(2, password);
+                                rs = pstm.executeQuery();
+                                return rs.next();
+                        }
+                } catch(SQLException e) {
+                        e.printStackTrace();
+                }
+                return false;
+       }
+    
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         AccountDAO dao = new AccountDAO();
         Account acc = dao.getAccountByUsername("chiuycuong");
