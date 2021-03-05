@@ -27,7 +27,7 @@
             ArrayList<Novel> novelList = new ArrayList<>();
             novelList = (ArrayList<Novel>) request.getAttribute("novelListObj");
             for (Novel elem : novelList) {%>
-            <p><%=elem.getNovelID()%> - <%=elem.getNovelName() %> - <%=elem.getAuthor().getUsername()%></p>
+                <a href="NovelServlet?a=novel_info&n=<%= elem.getNovelID() %>"><%= elem.getNovelName() %></a><p><%=elem.getAuthor().getUsername()%></p>
                 <%}
             %>
             <a href="LoginServlet">Log in</a>

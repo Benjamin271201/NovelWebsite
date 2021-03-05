@@ -6,9 +6,11 @@
 package controllers;
 
 import daos.AccountDAO;
+import daos.ChapterDAO;
 import daos.NovelDAO;
 import daos.TagDAO;
 import dtos.Account;
+import dtos.Chapter;
 import dtos.Novel;
 import dtos.Tag;
 import java.io.IOException;
@@ -47,6 +49,7 @@ public class NovelServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         NovelDAO nDAO = new NovelDAO();
         TagDAO tDAO = new TagDAO();
+        ChapterDAO cDAO = new ChapterDAO();
         AccountDAO aDao = new AccountDAO();
         RequestDispatcher rd = null;
         
@@ -63,11 +66,18 @@ public class NovelServlet extends HttpServlet {
             String novelID = (String) request.getParameter("n");
             ArrayList<Tag> tagList = tDAO.getTagList(novelID);
             Novel novelInfo = nDAO.getNovel(novelID);
+            ArrayList<Chapter> chapterList = cDAO.getChapters(novelID);
             rd = request.getRequestDispatcher(info);
             request.setAttribute("taglist", tagList);
-            System.out.println(tagList);
+            request.setAttribute("chapterlist", chapterList);
             request.setAttribute("novel", novelInfo);
             rd.forward(request, response);
+        }
+        
+        // a == read -> display a specific chapter
+        // based on n(novelID) and c(chapterID)
+        else if (action.equals("read")) {
+            
         }
     }
 
