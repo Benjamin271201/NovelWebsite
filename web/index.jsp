@@ -15,13 +15,13 @@
         <title>JSP Page</title>
     </head>
     <%
-        String activeUser = (String) session.getAttribute("username");
+       Account activeUser = (Account) session.getAttribute("username");
     %>
     <body>
         <%
             if(activeUser != null){
         %>
-        <h1>Hello <%=activeUser%></h1>
+        <h1>Hello ${sessionScope.user.username}</h1>
         <%}%>
         <%
             ArrayList<Novel> novelList = new ArrayList<>();
@@ -30,6 +30,7 @@
                 <a href="NovelServlet?a=novel_info&n=<%= elem.getNovelID() %>"><%= elem.getNovelName() %></a><p><%=elem.getAuthor().getUsername()%></p>
                 <%}
             %>
-            <a href="LoginServlet">Log in</a>
+            <%if(activeUser != null){%> <a href="LoginServlet?action=Logout">Logout</a>
+                <%} else{%> <a href="LoginServlet">Login</a><%}%>
     </body>
 </html>

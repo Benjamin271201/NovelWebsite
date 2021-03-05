@@ -7,23 +7,36 @@ package controllers;
 
 import daos.AccountDAO;
 import dtos.Account;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 /**
  *
  * @author chiuy
  */
-public class RegisterServlet extends HttpServlet {
 
+@MultipartConfig(
+        fileSizeThreshold = 10*1024*1024,
+        maxFileSize = 1024*1024*50,
+        maxRequestSize = 1024 * 1024 * 100
+)
+
+public class RegisterServlet extends HttpServlet {
+    private static final String UPLOAD_DIR = "avatars";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,6 +50,7 @@ public class RegisterServlet extends HttpServlet {
             throws ServletException, IOException, ClassNotFoundException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
        String action = request.getParameter("action");
+       PrintWriter out = response.getWriter();
        
        //if a==null -> redirect to register_form.html
        if(action == null){
@@ -49,7 +63,7 @@ public class RegisterServlet extends HttpServlet {
            String password = request.getParameter("password");
            String email = request.getParameter("email");
            String name = request.getParameter("name");
-           String avatarURL = request.getParameter("avatar");
+           String avatarURL = uploadFile(request);
            
            //search for duplicated username in database
            AccountDAO dao = new AccountDAO();
@@ -70,10 +84,54 @@ public class RegisterServlet extends HttpServlet {
                AccountDAO aDAO = new AccountDAO();
                aDAO.addAccount(newAccount);
                HttpSession session = request.getSession();
-               session.setAttribute("username", newAccount.getUsername());
+               session.setAttribute("user", newAccount);
                response.sendRedirect("NovelServlet");
            }
        }
+    }
+    
+    private String uploadFile(HttpServletRequest request) throws IOException, ServletException{
+        String fileName = "";
+        try {
+            Part filePart = request.getPart("avatar");
+            fileName = (String)getFileName(filePart);
+            
+            String applicationPath = request.getServletContext().getRealPath("");
+            String basePath = applicationPath + File.separator + UPLOAD_DIR + File.separator;
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+            try {
+                File outputFilePath = new File(basePath + fileName);
+                inputStream = filePart.getInputStream();
+                outputStream = new FileOutputStream(outputFilePath);
+                int read = 0;
+                final byte[] bytes = new byte[1024];
+                while((read = inputStream.read(bytes)) != -1){
+                    outputStream.write(bytes, 0, read);
+                }
+            } 
+            catch (Exception e) {
+                e.printStackTrace();
+                fileName = "";
+            }
+            finally{
+                if(inputStream != null) inputStream.close();
+                if(outputStream != null) outputStream.close();
+            }
+        }
+        catch (Exception e) {
+            fileName = "";
+        }
+        return fileName;
+    }
+    
+    private String getFileName(Part part){
+        for (String content : part.getHeader("content-disposition").split(";")) {
+            if(content.trim().startsWith("filename")){
+                return content.substring(content.indexOf('=')+1).trim().replace("\"", "");
+            }
+        }
+        return null;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

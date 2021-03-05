@@ -21,7 +21,7 @@
             if(email == null) email="";
             if(name == null) name="";
         %>
-        <form action="RegisterServlet" method="POST">
+        <form action="RegisterServlet" method="POST" enctype="multipart/form-data">
             <table>
                 <tr>
                     <th>Username</th>

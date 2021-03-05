@@ -61,10 +61,16 @@ public class LoginServlet extends HttpServlet {
             
             //else redirect to NovelServlet
             else{
+                AccountDAO aDAO = new AccountDAO();
                 HttpSession session = request.getSession();
-                session.setAttribute("username", username);
+                session.setAttribute("user", aDAO.getAccountByUsername(username));
                 response.sendRedirect("NovelServlet");
             }
+        }
+        else if(action.equals("logout")){
+            HttpSession session = request.getSession(false);
+            session.invalidate();
+            response.sendRedirect("NovelServlet");
         }
     }
 
