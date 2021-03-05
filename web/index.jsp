@@ -15,7 +15,7 @@
         <title>JSP Page</title>
     </head>
     <%
-       Account activeUser = (Account) session.getAttribute("username");
+       Account activeUser = (Account) session.getAttribute("user");
     %>
     <body>
         <%
