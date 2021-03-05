@@ -30,7 +30,7 @@
                 <a href="NovelServlet?a=novel_info&n=<%= elem.getNovelID() %>"><%= elem.getNovelName() %></a><p><%=elem.getAuthor().getUsername()%></p>
                 <%}
             %>
-            <%if(activeUser != null){%> <a href="LoginServlet?action=Logout">Logout</a>
+            <%if(activeUser != null){%> <a href="LoginServlet?action=logout">Logout</a>
                 <%} else{%> <a href="LoginServlet">Login</a><%}%>
     </body>
 </html>
