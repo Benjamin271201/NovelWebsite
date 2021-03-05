@@ -37,11 +37,10 @@ public class NovelDAO {
                     String novelName = rs.getString("name");
                     int views = rs.getInt("views");
                     String author = rs.getString("author");
-                    Date uploadDate = rs.getDate("uploadDate");
                     String coverURL = rs.getString("coverURL");
                     AccountDAO accDAO = new AccountDAO();
                     Account acc = accDAO.getAccountByUsername(author);
-                    Novel n = new Novel(novelID, novelName, views, acc, uploadDate, coverURL);
+                    Novel n = new Novel(novelID, novelName, views, acc, coverURL);
                     lst.add(n);
                 }
             }
@@ -79,11 +78,10 @@ public class NovelDAO {
                     String novelName = rs.getString("name");
                     int views = rs.getInt("views");
                     String author = rs.getString("author");
-                    Date uploadDate = rs.getDate("uploadDate");
                     String coverURL = rs.getString("coverURL");
                     AccountDAO accDAO = new AccountDAO();
                     Account acc = accDAO.getAccountByUsername(author);
-                    Novel n = new Novel(novelID, novelName, views, acc, uploadDate, coverURL);
+                    Novel n = new Novel(novelID, novelName, views, acc, coverURL);
                     return n;
                 }
             }

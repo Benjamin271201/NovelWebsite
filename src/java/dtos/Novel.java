@@ -17,17 +17,15 @@ public class Novel {
     private String novelName;
     private int viewCount;
     private Account author;
-    private Date uploadDate;
     private String coverURL;
 
     public Novel(){}
 
-    public Novel(String novelID, String novelName, int viewCount, Account author, Date uploadDate, String coverURL) {
+    public Novel(String novelID, String novelName, int viewCount, Account author, String coverURL) {
         this.novelID = novelID;
         this.novelName = novelName;
         this.viewCount = viewCount;
         this.author = author;
-        this.uploadDate = uploadDate;
         this.coverURL = coverURL;
     }
 
@@ -61,14 +59,6 @@ public class Novel {
 
     public void setAuthor(Account author) {
         this.author = author;
-    }
-
-    public Date getUploadDate() {
-        return uploadDate;
-    }
-
-    public void setUploadDate(Date uploadDate) {
-        this.uploadDate = uploadDate;
     }
 
     public String getCoverURL() {
