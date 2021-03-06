@@ -4,6 +4,7 @@
     Author     : chiuy
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,28 +13,22 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <%
-            String username = request.getParameter("username");
-            String email = request.getParameter("email");
-            String name = request.getParameter("name");
-            String avatar = request.getParameter("avatar");
-            if(username == null) username = "";
-            if(email == null) email="";
-            if(name == null) name="";
-        %>
+        <c:if test="${duplicatedUser != null}">
+            <p>This username already exists</p>
+        </c:if>
         <form action="RegisterServlet" method="POST" enctype="multipart/form-data">
             <table>
                 <tr>
                     <th>Username</th>
-                    <td><input type="text" name="username" value="<%=username%>"/></td>
+                    <td><input type="text" name="username" value="${username}"/></td>
                 </tr>
                 <tr>
                     <th>Full name</th>
-                    <td><input type="text" name="name" value="<%=name%>"/></td>
+                    <td><input type="text" name="name" value="${name}"/></td>
                 </tr>
                 <tr>
                     <th>Email</th>
-                    <td><input type="email" name="email" value="<%=email%>"/></td>
+                    <td><input type="email" name="email" value="${email}"/></td>
                 </tr>
                 <tr>
                     <th>Password</th>
@@ -45,7 +40,7 @@
                 </tr>
                 <tr>
                     <th>Avatar</th>
-                    <td><input type="file" name="avatar" value="<%=avatar%>"/></td>
+                    <td><input type="file" name="avatar" value="${avatar}"/></td>
                 </tr>
                 <tr>
                     <td><input type="submit" name="action" value="register"/></td>

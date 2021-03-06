@@ -4,6 +4,7 @@
     Author     : chiuy
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,16 +13,16 @@
         <title>JSP Page</title>
     </head>
    <body>
-       <% 
-            if(request.getAttribute("success") == null) {
-       %>
-       <p></p>
-       <%}
-        else{
-                boolean success =(boolean) request.getAttribute("success");
-                if(success == false){ %>
-       <p>username or password is invalid</p>
-       <%}}%>
+       <c:choose>
+           <c:when test="${success == null}">
+               <p></p>
+           </c:when>
+           <c:otherwise>
+               <c:if test="${success == false}">
+                    <p style="color:red">username or password is invalid</p>
+               </c:if>
+           </c:otherwise>
+       </c:choose>
        
         <form action="LoginServlet" name="f1" method="POST">
             <table>
