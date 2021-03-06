@@ -75,6 +75,7 @@ public class RegisterServlet extends HttpServlet {
                request.setAttribute("email", email);
                request.setAttribute("name", name);
                request.setAttribute("avatar", avatarURL);
+               request.setAttribute("duplicatedUser", foundAccount);
                request.getRequestDispatcher("register_form.jsp").forward(request, response);
            }
            
