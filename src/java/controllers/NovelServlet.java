@@ -13,10 +13,18 @@ import dtos.Account;
 import dtos.Chapter;
 import dtos.Novel;
 import dtos.Tag;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -66,7 +74,7 @@ public class NovelServlet extends HttpServlet {
             String novelID = (String) request.getParameter("n");
             ArrayList<Tag> tagList = tDAO.getTagList(novelID);
             Novel novelInfo = nDAO.getNovel(novelID);
-            ArrayList<Chapter> chapterList = cDAO.getChapters(novelID);
+            LinkedList<Chapter> chapterList = cDAO.getChapters(novelID);
             rd = request.getRequestDispatcher(info);
             request.setAttribute("taglist", tagList);
             request.setAttribute("chapterlist", chapterList);
@@ -77,8 +85,28 @@ public class NovelServlet extends HttpServlet {
         // a == read -> display a specific chapter
         // based on n(novelID) and c(chapterID)
         else if (action.equals("read")) {
-            
+            String nID = request.getParameter("n");
+            String cID = request.getParameter("c");
+            String filepath = getServletContext().getRealPath("") + "/Novels/" + nID + "/" + cID + ".txt";
+            ArrayList<String> linesFromFile = new ArrayList<>();
+            linesFromFile = (ArrayList<String>) readFile(filepath);
+            LinkedList<Chapter> cList = cDAO.getChapters(nID);
+            request.setAttribute("chapLines", linesFromFile);
+            request.getRequestDispatcher("chapter.jsp").forward(request, response);
         }
+    }
+    
+    public List<String> readFile(String filepath){
+        Path path = Paths.get(filepath);
+        List<String> linesList = new ArrayList<>();
+        try {
+             linesList = Files.readAllLines(path, StandardCharsets.UTF_8);
+             return linesList;
+        } 
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

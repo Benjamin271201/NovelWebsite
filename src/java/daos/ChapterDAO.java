@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import utils.DBConnect;
 
 /**
@@ -18,11 +19,11 @@ import utils.DBConnect;
  */
 public class ChapterDAO {
     //  get all chapters of a specific novel
-    public ArrayList<Chapter> getChapters(String novelID) {
+    public LinkedList<Chapter> getChapters(String novelID) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        ArrayList<Chapter> lst = new ArrayList<>();
+        LinkedList<Chapter> lst = new LinkedList<>();
         String sql = "SELECT * FROM Chapter WHERE novelID=? ORDER BY CONVERT(DATE, uploadDate) ASC";
         try{
             con = DBConnect.makeConnection();
@@ -55,6 +56,13 @@ public class ChapterDAO {
             }
         }
         return null;
+    }
+    
+    public int searchChapterInList(LinkedList<Chapter> lst, String novelID, String chapterID){
+        for (Chapter chapter : lst) {
+            if(novelID.equalsIgnoreCase(chapter.getChapterID()) && chapterID.equalsIgnoreCase(chapter.getChapterID())) return lst.indexOf(chapter);
+        }
+        return -1;
     }
     
     //  get one specific chapter of a novel

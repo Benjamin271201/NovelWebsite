@@ -101,5 +101,11 @@ public class NovelDAO {
         }
         return null;
     }
-    
+    public static void main(String[] args) {
+        NovelDAO nDao = new NovelDAO();
+        ArrayList<Novel> lst = nDao.getAllNovels();
+        for (Novel novel : lst) {
+            System.out.println(novel.getNovelID());
+        }
+    }
 }
