@@ -114,6 +114,43 @@ public class AccountDAO {
         return false;
     }
     
+    public Account getAccountbyEmail(String emailForm){
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = DBConnect.makeConnection();
+            if(con != null){
+                ps = con.prepareStatement("SELECT * FROM Account WHERE email=?");
+                ps.setString(1, emailForm);
+                rs = ps.executeQuery();
+                if(rs.next()){
+                    String user = rs.getString("username");
+                    String password = rs.getString("password");
+                    String email = rs.getString("email");
+                    String name = rs.getString("name");
+                    boolean isAdmin = Boolean.parseBoolean(rs.getString("isAdmin"));
+                    String avatarURL = rs.getString("avatarURL");
+                    Account acc = new Account(user, password, email, name, isAdmin, avatarURL);
+                    return acc;
+                }
+            }
+        } 
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally{
+            try {
+                if(rs != null) rs.close();
+                if(ps != null) ps.close();
+                if(con != null) con.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+    
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         AccountDAO dao = new AccountDAO();
         Account acc = dao.getAccountByUsername("chiuycuong");

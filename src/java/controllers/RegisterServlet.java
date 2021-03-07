@@ -68,6 +68,7 @@ public class RegisterServlet extends HttpServlet {
            //search for duplicated username in database
            AccountDAO dao = new AccountDAO();
            Account foundAccount = dao.getAccountByUsername(username);
+           Account foundAccountByEmail = dao.getAccountbyEmail(email);
            
            //if foundAccount!= null -> dispatch to register_form, keep all inputted values except password
            if(foundAccount != null){
@@ -76,6 +77,14 @@ public class RegisterServlet extends HttpServlet {
                request.setAttribute("name", name);
                request.setAttribute("avatar", avatarURL);
                request.setAttribute("duplicatedUser", foundAccount);
+               request.getRequestDispatcher("register_form.jsp").forward(request, response);
+           }
+           if(foundAccountByEmail != null){
+               request.setAttribute("username", username);
+               request.setAttribute("email", email);
+               request.setAttribute("name", name);
+               request.setAttribute("avatar", avatarURL);
+               request.setAttribute("duplicatedEmail", foundAccountByEmail);
                request.getRequestDispatcher("register_form.jsp").forward(request, response);
            }
            
