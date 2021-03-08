@@ -11,9 +11,11 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>${novel.novelName}</title>
+        <link rel="stylesheet" type="text/css" href="styles/index.css"> 
     </head>
     <body>
         Name: ${novel.novelName}<br>
+        <img src="${pageContext.request.contextPath}/Covers/${novel.coverURL}" alt="thegodfathercover" id="cover"/><br>
         Author: ${novel.author.getName()}<br>
         Tags: 
             <c:forEach items="${taglist}" var="tag">

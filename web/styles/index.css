@@ -37,3 +37,24 @@ small {
     font-size: 150%;
     font-weight: bolder;
 }
+
+.changeChapter{
+    position: relative;
+    left: 1000px;
+}
+
+#content{
+    margin: 2%;
+    text-align: justify;
+}
+
+.chapterList{
+    display: inline;
+    padding-bottom: 2%;
+}
+
+#cover{
+    width: 150px;
+    height: 200px;
+    object-fit: cover;
+}

@@ -90,7 +90,26 @@ public class NovelServlet extends HttpServlet {
             String filepath = getServletContext().getRealPath("") + "/Novels/" + nID + "/" + cID + ".txt";
             ArrayList<String> linesFromFile = new ArrayList<>();
             linesFromFile = (ArrayList<String>) readFile(filepath);
+            Novel currNovel = nDAO.getNovel(nID);
             LinkedList<Chapter> cList = cDAO.getChapters(nID);
+            int index = cDAO.searchChapterInList(cList, nID, cID);
+            Chapter currChap = cList.get(index);
+            Chapter prevChap = null;
+            if(index -1 >=0){
+                prevChap = cList.get(index-1);
+            }
+             Chapter nextChap = null;
+            if(index + 1 < cList.size()){
+                nextChap = cList.get(index+1);
+            }
+            if(prevChap != null){
+                request.setAttribute("prevChap", prevChap);
+            }
+            if(nextChap != null){
+                request.setAttribute("nextChap", nextChap);
+            }
+            request.setAttribute("currNovel", currNovel);
+            request.setAttribute("currChap", currChap);
             request.setAttribute("chapLines", linesFromFile);
             request.getRequestDispatcher("chapter.jsp").forward(request, response);
         }

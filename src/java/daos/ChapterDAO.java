@@ -60,9 +60,16 @@ public class ChapterDAO {
     
     public int searchChapterInList(LinkedList<Chapter> lst, String novelID, String chapterID){
         for (Chapter chapter : lst) {
-            if(novelID.equalsIgnoreCase(chapter.getChapterID()) && chapterID.equalsIgnoreCase(chapter.getChapterID())) return lst.indexOf(chapter);
+            if(novelID.equalsIgnoreCase(chapter.getNovelID()) && chapterID.equalsIgnoreCase(chapter.getChapterID())) return lst.indexOf(chapter);
         }
         return -1;
+    }
+    
+    public static void main(String[] args) {
+        ChapterDAO dao = new ChapterDAO();
+        LinkedList<Chapter> lst = dao.getChapters("N000002");
+        int index = dao.searchChapterInList(lst, "N000002", "C2");
+        System.out.println(index);
     }
     
     //  get one specific chapter of a novel
