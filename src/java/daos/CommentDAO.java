@@ -10,8 +10,8 @@ import java.sql.Connection;
 import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import utils.DBConnect;
 
@@ -41,7 +41,46 @@ public class CommentDAO {
                     String context = rs.getString("context");
                     Date commentDate = rs.getDate("commentDate");
                     
-                    Comment com = new Comment(commentID, novelID, chapterID, username, context, (java.sql.Date) commentDate);
+                    Comment com = new Comment(commentID, commentNovelID, commentChapterID, username, context, (java.sql.Date) commentDate);
+                    lst.add(com);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally{
+            try {
+                if(rs != null) rs.close();
+                if(ps != null) ps.close();
+                if(con != null) con.close();
+            } 
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return lst;
+    }
+    
+    public LinkedList<Comment> getAllComments(){
+           LinkedList<Comment> lst = new LinkedList<>();
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM Comment";
+        try {
+            con = DBConnect.makeConnection();
+            if(con != null){
+                ps = con.prepareStatement(sql);
+                rs = ps.executeQuery();
+                while(rs.next()){
+                    String commentID = rs.getString("commentID");
+                    String commentNovelID = rs.getString("novelID");
+                    String commentChapterID = rs.getString("chapterID");
+                    String username = rs.getString("username");
+                    String context = rs.getString("context");
+                    Date commentDate = rs.getDate("commentDate");
+                    
+                    Comment com = new Comment(commentID, commentNovelID, commentChapterID, username, context, (java.sql.Date) commentDate);
                     lst.add(com);
                 }
             }
@@ -64,7 +103,7 @@ public class CommentDAO {
     public boolean addComment(String username, String context, String chapterID, String novelID){
         Connection con = null;
         PreparedStatement ps = null;
-        LinkedList<Comment> lst = this.searchCommentsByChapter(novelID, chapterID);
+        LinkedList<Comment> lst = this.getAllComments();
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         Date date = new Date();
         String commentDate = format.format(date);
@@ -90,13 +129,16 @@ public class CommentDAO {
                 return true;
             }
         } 
-        catch (Exception e) {
+        catch (NumberFormatException | SQLException e) {
+            e.printStackTrace();
         }
         finally{
             try {
                 if(ps != null) ps.close();
                 if(con != null) con.close();
-            } catch (Exception e) {
+            } 
+            catch (SQLException e) {
+                e.printStackTrace();
             }
         }
         
@@ -117,24 +159,18 @@ public class CommentDAO {
                 return true;
             }
         } 
-        catch (Exception e) {
+        catch (SQLException e) {
+            e.printStackTrace();
         }
         finally{
             try {
                 if(ps != null) ps.close();
                 if(con != null) con.close();
-            } catch (Exception e) {
+            } 
+            catch (SQLException e) {
+                e.printStackTrace();
             }
         }
         return false;
-    }
-    
-    public static void main(String[] args) {
-        CommentDAO dao = new CommentDAO();
-        dao.addComment("admin", "bad", "C1", "N000002");
-         LinkedList<Comment> lst = dao.searchCommentsByChapter("N000002", "C1");
-         for (Comment comment : lst) {
-             System.out.println(comment.getCommentID());
-        }
     }
 }
