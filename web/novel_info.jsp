@@ -15,7 +15,7 @@
     </head>
     <body>
         Name: ${novel.novelName}<br>
-        <img src="${pageContext.request.contextPath}/Covers/${novel.coverURL}" alt="thegodfathercover" id="cover"/><br>
+        <img src="${pageContext.request.contextPath}/Covers/${novel.coverURL}" alt="Cover" id="cover"/><br>
         Author: ${novel.author.getName()}<br>
         Tags: 
             <c:forEach items="${taglist}" var="tag">
