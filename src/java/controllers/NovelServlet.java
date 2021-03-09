@@ -5,28 +5,22 @@
  */
 package controllers;
 
-import daos.AccountDAO;
 import daos.ChapterDAO;
+import daos.CommentDAO;
 import daos.NovelDAO;
 import daos.TagDAO;
-import dtos.Account;
 import dtos.Chapter;
+import dtos.Comment;
 import dtos.Novel;
 import dtos.Tag;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -54,12 +48,11 @@ public class NovelServlet extends HttpServlet {
         
         String info = "novel_info.jsp";
         String action = request.getParameter("a");
-        PrintWriter out = response.getWriter();
         NovelDAO nDAO = new NovelDAO();
         TagDAO tDAO = new TagDAO();
         ChapterDAO cDAO = new ChapterDAO();
-        AccountDAO aDao = new AccountDAO();
         RequestDispatcher rd = null;
+        CommentDAO cmDAO = new CommentDAO();
         
         //  a == null -> display website (index.jsp)
         if(action == null){
@@ -94,10 +87,14 @@ public class NovelServlet extends HttpServlet {
             LinkedList<Chapter> cList = cDAO.getChapters(nID);
             int index = cDAO.searchChapterInList(cList, nID, cID);
             Chapter currChap = cList.get(index);
+            
+            //get Previous chapter
             Chapter prevChap = null;
             if(index -1 >=0){
                 prevChap = cList.get(index-1);
             }
+            
+            //get next chapter
              Chapter nextChap = null;
             if(index + 1 < cList.size()){
                 nextChap = cList.get(index+1);
@@ -108,6 +105,11 @@ public class NovelServlet extends HttpServlet {
             if(nextChap != null){
                 request.setAttribute("nextChap", nextChap);
             }
+            
+            //get all comments
+            LinkedList<Comment> commentList = cmDAO.searchCommentsByChapter(nID, cID);
+       
+            request.setAttribute("comments", commentList);
             request.setAttribute("currNovel", currNovel);
             request.setAttribute("currChap", currChap);
             request.setAttribute("chapLines", linesFromFile);
