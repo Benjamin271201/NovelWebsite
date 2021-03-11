@@ -10,7 +10,6 @@ import utils.DBConnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -68,6 +67,41 @@ public class TagDAO {
             if(con != null){
                 ps = con.prepareStatement(sql);
                 ps.setString(1, novelID);
+                rs = ps.executeQuery();
+                while(rs.next()){
+                    String tagID = rs.getString("tagID");
+                    Tag tag = getTag(tagID);
+                    tagList.add(tag);
+                }
+                return tagList;
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs != null) rs.close();
+                if(ps != null) ps.close();
+                if(con != null) con.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+    
+    public ArrayList<Tag> getAllTags(){
+         Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<Tag> tagList = new ArrayList<>();
+        String sql = "SELECT * FROM Tag";
+        try {
+            con = DBConnect.makeConnection();
+            if(con != null){
+                ps = con.prepareStatement(sql);
                 rs = ps.executeQuery();
                 while(rs.next()){
                     String tagID = rs.getString("tagID");
