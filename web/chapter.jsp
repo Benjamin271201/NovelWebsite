@@ -20,10 +20,10 @@
             </c:forEach>
         </div>
         <c:if test="${prevChap != null}">
-            <a href="NovelServlet?a=read&n=${prevChap.novelID}&c=${prevChap.chapterID}" class="changeChapter">Previous Chapter</a>
+            <a href="NovelServlet?a=read&n=${prevChap.novel.novelID}&c=${prevChap.chapterID}" class="changeChapter">Previous Chapter</a>
         </c:if>
         <c:if test="${nextChap != null}">
-            <a href="NovelServlet?a=read&n=${nextChap.novelID}&c=${nextChap.chapterID}" class="changeChapter">Next Chapter</a>
+            <a href="NovelServlet?a=read&n=${nextChap.novel.novelID}&c=${nextChap.chapterID}" class="changeChapter">Next Chapter</a>
         </c:if>
             <div class="chapterList">
                 <a href="NovelServlet?a=novel_info&n=${currNovel.novelID}">Back to chapters list</a>
@@ -57,7 +57,7 @@
                             <tbody>
                                 <c:forEach items="${comments}" var="comment">
                                     <tr>
-                                        <td>${comment.username}</td>
+                                        <td>${comment.user.username}</td>
                                         <td>${comment.context}</td>
                                         <td>${comment.commentDate}</td>
                                         <c:if test="${sessionScope.user.isAdmin == true}">

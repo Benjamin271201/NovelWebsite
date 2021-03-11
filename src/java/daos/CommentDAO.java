@@ -26,6 +26,8 @@ public class CommentDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
         String sql = "SELECT * FROM Comment WHERE novelID=? AND chapterID=?";
+        AccountDAO aDAO = new AccountDAO();
+        ChapterDAO cDAO = new ChapterDAO();
         try {
             con = DBConnect.makeConnection();
             if(con != null){
@@ -41,7 +43,7 @@ public class CommentDAO {
                     String context = rs.getString("context");
                     Date commentDate = rs.getDate("commentDate");
                     
-                    Comment com = new Comment(commentID, commentNovelID, commentChapterID, username, context, (java.sql.Date) commentDate);
+                    Comment com = new Comment(commentID, cDAO.getChapterByChapterIDNovelID(commentNovelID, commentChapterID), aDAO.getAccountByUsername(username), context, (java.sql.Date) commentDate);
                     lst.add(com);
                 }
             }
@@ -67,6 +69,8 @@ public class CommentDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
         String sql = "SELECT * FROM Comment";
+        ChapterDAO cDAO = new ChapterDAO();
+        AccountDAO aDAO = new AccountDAO();
         try {
             con = DBConnect.makeConnection();
             if(con != null){
@@ -80,7 +84,7 @@ public class CommentDAO {
                     String context = rs.getString("context");
                     Date commentDate = rs.getDate("commentDate");
                     
-                    Comment com = new Comment(commentID, commentNovelID, commentChapterID, username, context, (java.sql.Date) commentDate);
+                    Comment com = new Comment(commentID, cDAO.getChapterByChapterIDNovelID(commentNovelID, commentChapterID), aDAO.getAccountByUsername(username), context, (java.sql.Date) commentDate);
                     lst.add(com);
                 }
             }

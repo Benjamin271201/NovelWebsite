@@ -24,7 +24,7 @@
         Views: ${novel.viewCount}<br>        
         List of chapters: 
             <c:forEach items="${chapterlist}" var="chapter">
-                <a href="NovelServlet?a=read&n=${chapter.novelID}&c=${chapter.chapterID}">${chapter.chapterName}</a>
+                <a href="NovelServlet?a=read&n=${chapter.novel.novelID}&c=${chapter.chapterID}">${chapter.chapterName}</a>
             </c:forEach>
         <br>
     </body>

@@ -5,27 +5,18 @@
  */
 package dtos;
 
+import java.sql.Date;
+
 /**
  *
  * @author ASUS GAMING
  */
 public class Chapter implements Comparable<Chapter>{
     private String chapterID;
-    private String novelID;
+    private Novel novel;
     private String chapterName;
     private String fileURL;
-    private String uploadDate;
-    
-    public Chapter() {
-    }
-
-    public Chapter(String chapterID, String novelID, String chapterName, String fileURL, String uploadDate) {
-        this.chapterID = chapterID;
-        this.novelID = novelID;
-        this.chapterName = chapterName;
-        this.fileURL = fileURL;
-        this.uploadDate = uploadDate;
-    }
+    private Date uploadDate;
 
     public String getChapterID() {
         return chapterID;
@@ -35,12 +26,12 @@ public class Chapter implements Comparable<Chapter>{
         this.chapterID = chapterID;
     }
 
-    public String getNovelID() {
-        return novelID;
+    public Novel getNovel() {
+        return novel;
     }
 
-    public void setNovelID(String novelID) {
-        this.novelID = novelID;
+    public void setNovel(Novel novel) {
+        this.novel = novel;
     }
 
     public String getChapterName() {
@@ -59,17 +50,28 @@ public class Chapter implements Comparable<Chapter>{
         this.fileURL = fileURL;
     }
 
-    public String getUploadDate() {
+    public Date getUploadDate() {
         return uploadDate;
     }
 
-    public void setUploadDate(String uploadDate) {
+    public void setUploadDate(Date uploadDate) {
         this.uploadDate = uploadDate;
     }
 
+    public Chapter(String chapterID, Novel novel, String chapterName, String fileURL, Date uploadDate) {
+        this.chapterID = chapterID;
+        this.novel = novel;
+        this.chapterName = chapterName;
+        this.fileURL = fileURL;
+        this.uploadDate = uploadDate;
+    }
+    
+    public Chapter() {
+    }
+
     @Override
-    public int compareTo(Chapter o) {
-        return uploadDate.compareTo(o.uploadDate);
+    public int compareTo(Chapter t) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
      
 }
