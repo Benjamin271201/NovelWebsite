@@ -7,13 +7,10 @@ package daos;
 
 import dtos.Account;
 import dtos.Novel;
-import dtos.Tag;
 import utils.DBConnect;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -101,11 +98,42 @@ public class NovelDAO {
         }
         return null;
     }
-    public static void main(String[] args) {
-        NovelDAO nDao = new NovelDAO();
-        ArrayList<Novel> lst = nDao.getAllNovels();
-        for (Novel novel : lst) {
-            System.out.println(novel.getNovelID());
+    
+    public boolean addNovel(Novel n){
+        Connection con = null;
+        PreparedStatement ps = null;
+        String sql = "INSERT INTO Novel(novelID, name, views, author, coverURL)"
+                + "VALUES(?, ?, ?, ?, ?)";
+        try {
+            con = DBConnect.makeConnection();
+            if(con != null){
+                ps = con.prepareStatement(sql);
+                ps.setString(1, n.getNovelID());
+                ps.setString(2, n.getNovelName());
+                ps.setInt(3, n.getViewCount());
+                ps.setString(4, n.getAuthor().getUsername());
+                ps.setString(5, n.getCoverURL());
+                
+                ps.executeUpdate();
+                return true;
+            }
+        } 
+        catch (Exception e) {
         }
+        finally{
+            try {
+                if(ps != null) ps.close();
+                if(con != null) con.close();
+            } catch (Exception e) {
+            }
+        }
+        return false;
+    }
+    
+    public static void main(String[] args) {
+        NovelDAO nDAO = new NovelDAO();
+        ArrayList<Novel> lst = nDAO.getAllNovels();
+        String str = "N" + (Integer.parseInt(lst.get(lst.size()-1).getNovelID().substring(1)) + 1);
+        System.out.println(str);
     }
 }
