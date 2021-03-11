@@ -118,7 +118,7 @@ public class CommentDAO {
             if(con != null){
                 ps = con.prepareStatement(sql);
                 if(lst.size()>0){
-                    ps.setString(1,  "CM" + (Integer.parseInt(String.valueOf(lst.getLast().getCommentID().substring(2))) +1));
+                    ps.setString(1,  "CM" + (Integer.parseInt(lst.getLast().getCommentID().substring(2)) +1));
                 }
                 else{
                     ps.setString(1, "CM1");
@@ -176,5 +176,12 @@ public class CommentDAO {
             }
         }
         return false;
+    }
+    
+    public static void main(String[] args) {
+        CommentDAO dao = new CommentDAO();
+        LinkedList<Comment> lst = dao.getAllComments();
+        String s = "CM" + (Integer.parseInt(lst.getLast().getCommentID().substring(2)) + 2);
+        System.out.println(s);
     }
 }
