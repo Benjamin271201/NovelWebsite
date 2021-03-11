@@ -48,6 +48,7 @@
         <c:set var="user" value="${sessionScope.user}"></c:set>
         <c:if test="${user != null}">
             <h1>Hello ${user.name}</h1>
+            <a href="NovelServlet?a=addNovelForm">Add a novel</a><br>
         </c:if>
         <c:forEach items="${novelListObj}" var="novel">
             <a href="NovelServlet?a=novel_info&n=${novel.novelID}">${novel.novelName}</a><p>${novel.author.getUsername()}</p>
