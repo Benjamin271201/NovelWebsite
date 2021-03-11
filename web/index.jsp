@@ -9,14 +9,14 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Novel List</title>
         <link rel="stylesheet" type="text/css" href="styles/index.css"> 
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     </head>
     <body>
             <ul class="container" id="nav-bar">
             <li>
-                <a href="index.jsp" class="avatar"><img src="images/avatar.svg" alt="Click here to go back to main page" width="75px" height="40px" title="Novel List"></a>
+                <a href="NovelServlet " class="avatar"><img src="images/avatar.svg" alt="Click here to go back to main page" width="75px" height="40px" title="Novel List"></a>
             </li>
             <li>
                 <small class="avatar">Novel List</small>
@@ -32,27 +32,25 @@
                         </form>
                 </small>
             </li>
-            <%
-                    if(session.getAttribute("user")==null) {
-            %>
-            <li style="float:right">
-                    <button><a href="login_form.jsp" id="login-btn">Login</a></button>
-            </li>
-            <%}%>
-            <%
-                    if(session.getAttribute("user")!=null) {
-            %>
-            <li style="float:right">
-                    <button><a href="#" id="login-btn">Logged in!</a></button>
-            </li>
-            <%}%>
+            <c:choose>
+                <c:when test="${sessionScope.user == null}">
+                    <li style="float:right">
+                        <button><a href="login_form.jsp" id="login-btn">Login</a></button>
+                    </li>
+                </c:when>
+                <c:otherwise>
+                    <li style="float:right">
+                        <button><a href="#" id="login-btn">Logged in!</a></button>
+                    </li>
+                </c:otherwise>
+            </c:choose>
         </ul>   
         <c:set var="user" value="${sessionScope.user}"></c:set>
         <c:if test="${user != null}">
             <h1>Hello ${user.name}</h1>
         </c:if>
         <c:forEach items="${novelListObj}" var="novel">
-        <a href="NovelServlet?a=novel_info&n=${novel.novelID}">${novel.novelName}</a><p>${novel.author.getUsername()}</p>
+            <a href="NovelServlet?a=novel_info&n=${novel.novelID}">${novel.novelName}</a><p>${novel.author.getUsername()}</p>
         </c:forEach>
     </body>
 </html>
