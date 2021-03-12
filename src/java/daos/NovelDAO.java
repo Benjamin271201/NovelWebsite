@@ -130,6 +130,48 @@ public class NovelDAO {
         return false;
     }
     
+    public ArrayList<Novel> getUserNovels(String username) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<Novel> lst = new ArrayList<>();
+        
+        String sql = "SELECT * FROM Novel WHERE author=?";
+        try{
+            con = DBConnect.makeConnection();
+            if(con != null){
+                ps = con.prepareStatement(sql);
+                ps.setString(1, username);
+                rs = ps.executeQuery();
+                while(rs.next()){
+                    String novelID = rs.getString("novelID");
+                    String novelName = rs.getString("name");
+                    int views = rs.getInt("views");
+                    String coverURL = rs.getString("coverURL");
+                    AccountDAO accDAO = new AccountDAO();
+                    Account acc = accDAO.getAccountByUsername(username);
+                    Novel n = new Novel(novelID, novelName, views, acc, coverURL);
+                    lst.add(n);
+                }
+                return lst;
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally{
+            try {
+                if(rs != null) rs.close();
+                if(ps != null) ps.close();
+                if(con != null) con.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+    
     public static void main(String[] args) {
         NovelDAO nDAO = new NovelDAO();
         ArrayList<Novel> lst = nDAO.getAllNovels();

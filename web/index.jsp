@@ -50,11 +50,11 @@
                         </c:when>
                         <c:otherwise>
                                 <div class="user-mng">
-                                        <img src="images/default_avatar.png" alt="user's avatar" id="avatar">
-                                        <ul class="user-dropdown">
-                                            <li><a id="Manage" href="#">Manage Account</a></li>
-                                            <li><a id="Logout" href="LoginServlet?action=logout">Logout</a></li>
-                                        </ul>
+                                    <img src="images/default_avatar.png" alt="user" id="avatar">
+                                    <ul class="user-dropdown">
+                                        <li><a id="Manage" href="#">Manage Account</a></li>
+                                        <li><a id="Logout" href="LoginServlet?action=logout">Logout</a></li>
+                                    </ul>
                                 </div>
                         </c:otherwise>
                 </c:choose>
@@ -67,10 +67,22 @@
             </div>
             <section class="body-text">
                 <c:set var="user" value="${sessionScope.user}"></c:set>
-                <c:if test="${user != null}">
-                    <h1>Hello ${user.name}</h1>
-                    <a href="NovelServlet?a=addNovelForm">Add a novel</a><br>
-                </c:if>
+                <c:choose>
+                    <c:when test="${user != null}">
+                        <div class="side-box">
+                            <a href="NovelServlet?a=n_form">Add a novel</a><br>
+                            <a href="NovelServlet?a=display&u=${user.username}">Your novels</a><br>
+                            <a href="NovelServlet?a=bookmarked">Bookmarked</a><br>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="side-box">
+                            <a href="LoginServlet">Add a novel</a><br>
+                            <a href="LoginServlet">Your novels</a><br>
+                            <a href="LoginServlet">Bookmarked</a><br>
+                        </div>
+                    </c:otherwise> 
+                </c:choose>
                 <c:forEach items="${novelListObj}" var="novel">
                     <a href="NovelServlet?a=novel_info&n=${novel.novelID}">${novel.novelName}</a><p>${novel.author.getUsername()}</p>
                 </c:forEach>

@@ -128,7 +128,7 @@ public class NovelServlet extends HttpServlet {
             request.setAttribute("chapLines", linesFromFile);
             request.getRequestDispatcher("chapter.jsp").forward(request, response);
         }
-        else if(action.equals("addNovelForm")){
+        else if(action.equals("n_form")){
             response.sendRedirect("insert_novel_form.jsp");
         }
         else if(action.equals("Add")){
@@ -148,6 +148,13 @@ public class NovelServlet extends HttpServlet {
                 nDAO.addNovel(newNovel);
                 response.sendRedirect("NovelServlet");
             }
+        }
+        else if (action.equals("display")) {
+            String username = request.getParameter("u");
+            ArrayList<Novel> lst = nDAO.getUserNovels(username);
+            request.setAttribute("novelListObj", lst);
+            rd = request.getRequestDispatcher("index.jsp");
+            rd.forward(request, response);
         }
     }
     
