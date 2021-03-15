@@ -153,7 +153,6 @@ public class NovelDAO {
                     Novel n = new Novel(novelID, novelName, rating, acc, coverURL);
                     lst.add(n);
                 }
-                return lst;
             }
         }
         catch (Exception e) {
@@ -169,7 +168,7 @@ public class NovelDAO {
                 e.printStackTrace();
             }
         }
-        return null;
+        return lst;
     }
     
     public static void main(String[] args) {
