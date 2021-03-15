@@ -31,7 +31,7 @@ a {
     background-color: rgb(212, 212, 212);
     width: 100%;
     float: none;
-    height: 8%;
+    height: 2.8rem;
     overflow: visible;
     border-bottom: 1px solid black;
     z-index: 1000;
@@ -51,7 +51,7 @@ a {
     left: 2%;
     background-color: rgb(255, 255, 255);
     border-right: 1px solid black;
-    height: 59px;
+    height: 2.77rem;
 }
 .drop-btn {
     cursor: default;
