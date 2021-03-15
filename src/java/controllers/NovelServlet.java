@@ -131,7 +131,7 @@ public class NovelServlet extends HttpServlet {
         else if(action.equals("n_form")){
             response.sendRedirect("insert_novel_form.jsp");
         }
-        else if(action.equals("Add")){
+        else if(action.equals("n_add")){
             String novelName = request.getParameter("novelName");
             String coverURL = uploadFile(request);
             ArrayList<Novel> nList = nDAO.getAllNovels();

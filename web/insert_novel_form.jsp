@@ -21,6 +21,7 @@
                     <a class="drop-btn" href="#">Category <i class="fa fa-caret-down"></i></a>
                     <ul class="dropdown-content">
                         <div class=column id="col1">
+                            // NovelServlet?a=search&t=${tag.tagID}
                             <li><a class="tag" href="#">Tag 1</a></li>
                             <li><a class="tag" href="#">Tag 2</a></li>
                             <li><a class="tag" href="#">Tag 3</a></li>
@@ -68,6 +69,7 @@
             <section id="body-text" style="margin-top: 6%">
                 <h1>Add a novel</h1>
                 <form action="NovelServlet" enctype="multipart/form-data" method="POST">
+                    <input type="hidden" value="n_add" name="a">
                     <table>
                         <tr>
                             <th>Novel name</th>
@@ -78,7 +80,7 @@
                             <td><input type="file" name="coverURL" id="coverURL"/></td>
                         </tr>
                         <tr>
-                            <td><input type="submit" value="Add" name="a"/></td>
+                            <td><input type="submit" value="Add"/></td>
                         </tr>
                     </table>
                 </form>

@@ -83,9 +83,16 @@
                         </div>
                     </c:otherwise> 
                 </c:choose>
-                <c:forEach items="${novelListObj}" var="novel">
-                    <a href="NovelServlet?a=novel_info&n=${novel.novelID}">${novel.novelName}</a><p>${novel.author.getUsername()}</p>
-                </c:forEach>
-                    </section>
+                <div class="n-container">
+                    <ul class="n-list">
+                    <c:forEach items="${novelListObj}" var="novel">
+                        <li class="n-listitem">
+                            <a class="n-title" href="NovelServlet?a=novel_info&n=${novel.novelID}">${novel.novelName}</a>
+                            <p>${novel.author.getUsername()}</p>
+                        </li>    
+                    </c:forEach>
+                    </ul>
+                </div>
+            </section>
     </body>
 </html>

@@ -15,16 +15,16 @@ import java.util.ArrayList;
 public class Novel {
     private String novelID;
     private String novelName;
-    private int viewCount;
+    private int rating;
     private Account author;
     private String coverURL;
 
     public Novel(){}
 
-    public Novel(String novelID, String novelName, int viewCount, Account author, String coverURL) {
+    public Novel(String novelID, String novelName, int rating, Account author, String coverURL) {
         this.novelID = novelID;
         this.novelName = novelName;
-        this.viewCount = viewCount;
+        this.rating = rating;
         this.author = author;
         this.coverURL = coverURL;
     }
@@ -45,12 +45,12 @@ public class Novel {
         this.novelName = novelName;
     }
 
-    public int getViewCount() {
-        return viewCount;
+    public int getRating() {
+        return rating;
     }
 
-    public void setViewCount(int viewCount) {
-        this.viewCount = viewCount;
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
     public Account getAuthor() {

@@ -176,3 +176,28 @@ li:hover {
     height: 100%;
     float: right;
 }
+
+.n-container {
+    width: 70%;
+}
+
+.n-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.n-listitem {
+  flex-basis:33%;
+  list-style:none;
+  text-align:center;
+}
+
+.n-title {
+    font: bold 12px/22px Tahoma,Geneva,sans-serif;
+    color: red;
+    margin-right: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inherit;
+}

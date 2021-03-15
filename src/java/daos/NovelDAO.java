@@ -32,12 +32,12 @@ public class NovelDAO {
                 while(rs.next()){
                     String novelID = rs.getString("novelID");
                     String novelName = rs.getString("name");
-                    int views = rs.getInt("views");
+                    int rating = rs.getInt("rating");
                     String author = rs.getString("author");
                     String coverURL = rs.getString("coverURL");
                     AccountDAO accDAO = new AccountDAO();
                     Account acc = accDAO.getAccountByUsername(author);
-                    Novel n = new Novel(novelID, novelName, views, acc, coverURL);
+                    Novel n = new Novel(novelID, novelName, rating, acc, coverURL);
                     lst.add(n);
                 }
             }
@@ -73,12 +73,12 @@ public class NovelDAO {
                 rs = ps.executeQuery();
                 if(rs.next()){
                     String novelName = rs.getString("name");
-                    int views = rs.getInt("views");
+                    int rating = rs.getInt("rating");
                     String author = rs.getString("author");
                     String coverURL = rs.getString("coverURL");
                     AccountDAO accDAO = new AccountDAO();
                     Account acc = accDAO.getAccountByUsername(author);
-                    Novel n = new Novel(novelID, novelName, views, acc, coverURL);
+                    Novel n = new Novel(novelID, novelName, rating, acc, coverURL);
                     return n;
                 }
             }
@@ -102,7 +102,7 @@ public class NovelDAO {
     public boolean addNovel(Novel n){
         Connection con = null;
         PreparedStatement ps = null;
-        String sql = "INSERT INTO Novel(novelID, name, views, author, coverURL)"
+        String sql = "INSERT INTO Novel(novelID, name, rating, author, coverURL)"
                 + "VALUES(?, ?, ?, ?, ?)";
         try {
             con = DBConnect.makeConnection();
@@ -110,7 +110,7 @@ public class NovelDAO {
                 ps = con.prepareStatement(sql);
                 ps.setString(1, n.getNovelID());
                 ps.setString(2, n.getNovelName());
-                ps.setInt(3, n.getViewCount());
+                ps.setInt(3, n.getRating());
                 ps.setString(4, n.getAuthor().getUsername());
                 ps.setString(5, n.getCoverURL());
                 
@@ -146,11 +146,11 @@ public class NovelDAO {
                 while(rs.next()){
                     String novelID = rs.getString("novelID");
                     String novelName = rs.getString("name");
-                    int views = rs.getInt("views");
+                    int rating = rs.getInt("rating");
                     String coverURL = rs.getString("coverURL");
                     AccountDAO accDAO = new AccountDAO();
                     Account acc = accDAO.getAccountByUsername(username);
-                    Novel n = new Novel(novelID, novelName, views, acc, coverURL);
+                    Novel n = new Novel(novelID, novelName, rating, acc, coverURL);
                     lst.add(n);
                 }
                 return lst;

@@ -45,18 +45,18 @@
                 </div>
                 <c:choose>
                         <c:when test="${sessionScope.user == null}">
-                                <div class="login">
-                                <button><a href="login_form.jsp" class="login-btn">Login</a></button>
-                                </div>
+                            <div class="login">
+                            <button><a href="login_form.jsp" class="login-btn">Login</a></button>
+                            </div>
                         </c:when>
                         <c:otherwise>
-                                <div class="user-mng">
-                                        <img src="images/default_avatar.png" alt="user's avatar" id="avatar">
-                                        <ul class="user-dropdown">
-                                            <li><a id="Manage" href="#">Manage Account</a></li>
-                                            <li><a id="Logout" href="LoginServlet?action=logout">Logout</a></li>
-                                        </ul>
-                                </div>
+                            <div class="user-mng">
+                                    <img src="images/default_avatar.png" alt="user's avatar" id="avatar">
+                                    <ul class="user-dropdown">
+                                        <li><a id="Manage" href="#">Manage Account</a></li>
+                                        <li><a id="Logout" href="LoginServlet?action=logout">Logout</a></li>
+                                    </ul>
+                            </div>
                         </c:otherwise>
                 </c:choose>
                 <div class="search-container">
@@ -74,7 +74,7 @@
                     <c:forEach items="${taglist}" var="tag">
                         ${tag.tagName}
                     </c:forEach> <br>
-                Views: ${novel.viewCount}<br>        
+                Rating: ${novel.rating}<br>        
                 List of chapters: 
                     <c:forEach items="${chapterlist}" var="chapter">
                         <a href="NovelServlet?a=read&n=${chapter.novel.novelID}&c=${chapter.chapterID}">${chapter.chapterName}</a>
