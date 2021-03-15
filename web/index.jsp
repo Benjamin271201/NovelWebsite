@@ -72,14 +72,14 @@
                         <div class="side-box">
                             <a href="NovelServlet?a=n_form">Add a novel</a><br>
                             <a href="NovelServlet?a=display&u=${user.username}">Your novels</a><br>
-                            <a href="NovelServlet?a=bookmarked">Bookmarked</a><br>
+                            <a href="NovelServlet?a=bookmarked">Bookmark</a><br>
                         </div>
                     </c:when>
                     <c:otherwise>
                         <div class="side-box">
                             <a href="LoginServlet">Add a novel</a><br>
                             <a href="LoginServlet">Your novels</a><br>
-                            <a href="LoginServlet">Bookmarked</a><br>
+                            <a href="LoginServlet">Bookmark</a><br>
                         </div>
                     </c:otherwise> 
                 </c:choose>
