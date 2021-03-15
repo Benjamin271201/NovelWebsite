@@ -151,10 +151,37 @@ public class AccountDAO {
         return null;
     }
     
-    public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        AccountDAO dao = new AccountDAO();
-        Account acc = dao.getAccountByUsername("chiuycuong");
-        System.out.println(acc.getUsername());
-        System.out.println(acc.getName());
+    public boolean updateAccount(Account user){
+        Connection con = null;
+        PreparedStatement ps = null;
+        String sql = "UPDATE Account SET password=?, name=?,email=?, avatarURL=?, isAdmin=? WHERE username=?";
+        try {
+            con = DBConnect.makeConnection();
+            if(con != null){
+                ps = con.prepareStatement(sql);
+                ps.setString(1, user.getPassword());
+                ps.setString(2, user.getName());
+                ps.setString(3, user.getEmail());
+                ps.setString(4, user.getAvatarURL());
+                ps.setString(5, Boolean.toString(user.isIsAdmin()));
+                ps.setString(6, user.getUsername());
+                
+                ps.executeUpdate();
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        finally{
+            try {
+                if(ps != null) ps.close();
+                if(con != null) con.close();
+            } 
+            catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+         
+        }
+        return false;
     }
 }
