@@ -40,6 +40,11 @@ public class Tag implements Comparable<Tag>{
     public int compareTo(Tag obj) {
         return tagName.compareTo(obj.tagName);
     }
+
+        @Override
+        public String toString() {
+                return "Tag{" + "tagID=" + tagID + ", tagName=" + tagName + '}';
+        }
     
     
     
