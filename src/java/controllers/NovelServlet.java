@@ -186,7 +186,7 @@ public class NovelServlet extends HttpServlet {
             fileName = (String)getFileName(filePart);
             
             String applicationPath = request.getServletContext().getRealPath("");
-            String basePath = applicationPath + File.separator + "Covers" + File.separator;
+            String basePath = applicationPath + File.separator + "covers" + File.separator;
             InputStream inputStream = null;
             OutputStream outputStream = null;
             try {

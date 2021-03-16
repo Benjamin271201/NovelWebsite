@@ -10,6 +10,7 @@
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const email = document.getElementById("email");
 const username = document.getElementById("username");
+const name = document.getElementById("name");
 
 function checkPassword(passwd, confpasswd){
     var n = passwd.localeCompare(confpasswd);
@@ -24,43 +25,49 @@ form.addEventListener('submit', event =>{
         let n = checkPassword(password.value, confPassword.value);
         if(n === false){
             event.preventDefault();
-            document.getElementById("confpassMsg").style.display = "table-row";
+            document.getElementById("confpassMsg").style.visibility = "visible";
             confPassword.value = "";
-            const confPassMSG = document.getElementById("confpassMsg").childNodes[1].textContent;
-            console.log(confPassMSG);
         }
         else if(password.value.length<5 || password.value.length>32){
             event.preventDefault();
-            document.getElementById("passMsg").style.display = "table-row";
+            document.getElementById("passMsg").style.visibility = "visible";
         }
         if(emailRegex.test(email.value) === false){
             event.preventDefault();
-            document.getElementById("emailMsg").style.display = "table-row";
+            document.getElementById("emailMsg").style.visibility = "visible";
         }
         if(username.value.length<4 || username.value.length>20){
             event.preventDefault();
-            document.getElementById("usernameMsg").style.display = 'table-row';
+            document.getElementById("usernameMsg").style.visibility = 'visible';
+        }
+        if(name.value === ""){
+             event.preventDefault();
+             document.getElementById("nameMsg").style.visibility = 'visible';
         }
 });
 
 const confPassMSG = document.getElementById("confpassMsg");
 confPassword.addEventListener('input', ()=>{
-   confPassMSG.style.display = 'none'; 
+   confPassMSG.style.visibility = 'hidden'; 
 });
 
 password.addEventListener('input', ()=>{
-   document.getElementById("passMsg").style.display = 'none'; 
+   document.getElementById("passMsg").style.visibility = 'hidden'; 
 });
 
 email.addEventListener('input', () =>{
-   document.getElementById("emailMsg").style.display = 'none'; 
+   document.getElementById("emailMsg").style.visibility = 'hidden'; 
     if(document.getElementById("duplicatedEmailMsg") !== null){
         document.getElementById("duplicatedEmailMsg") .style.display='none';
     }
 });
 
 username.addEventListener('input', () =>{
-   document.getElementById("usernameMsg").style.display = 'none'; 
+   document.getElementById("usernameMsg").style.visibility = 'hidden'; 
+});
+
+name.addEventListener('input', () =>{
+   document.getElementById("nameMsg").style.visibility = 'hidden'; 
 });
 
 
