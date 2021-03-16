@@ -110,7 +110,7 @@ public class RegisterServlet extends HttpServlet {
             fileName = (String)getFileName(filePart);
             
             String applicationPath = request.getServletContext().getRealPath("");
-            String basePath = applicationPath + File.separator + UPLOAD_DIR + File.separator;
+            String basePath = applicationPath + File.separator + "images" + File.separator + UPLOAD_DIR + File.separator;
             InputStream inputStream = null;
             OutputStream outputStream = null;
             try {

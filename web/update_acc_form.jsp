@@ -50,7 +50,7 @@
                         </c:when>
                         <c:otherwise>
                                 <div class="user-mng">
-                                    <img src="${pageContext.request.contextPath}/avatars/${sessionScope.user.avatarURL}" alt="user" id="avatar">
+                                    <img src="${pageContext.request.contextPath}/images/avatars/${sessionScope.user.avatarURL}" alt="user" id="avatar">
                                     <ul class="user-dropdown">
                                         <li><a id="Manage" href="ManageAccountServlet">Manage Account</a></li>
                                         <li><a id="Logout" href="LoginServlet?action=logout">Logout</a></li>
@@ -98,7 +98,7 @@
                     </tr>
                     <tr>
                         <th>Profile Picture</th>
-                        <td><img src="${pageContext.request.contextPath}/avatars/${user.avatarURL}" style="height: 50px; width: 50px; border: 1px solid black; border-radius: 50%; margin-top: 5px;"/><input type="file" name="avatar"/></td>
+                        <td><img src="${pageContext.request.contextPath}/images/avatars/${user.avatarURL}" style="height: 50px; width: 50px;  border-radius: 50%; margin-top: 5px;"/><input type="file" name="avatar"/></td>
                     </tr>
                     <tr>
                         <td><input type="submit" value="Update"/></td>

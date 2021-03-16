@@ -51,7 +51,7 @@
                         </c:when>
                         <c:otherwise>
                             <div class="user-mng">
-                                    <img src="${pageContext.request.contextPath}/avatars/${sessionScope.user.avatarURL}" alt="user's avatar" id="avatar">
+                                    <img src="${pageContext.request.contextPath}/images/avatars/${sessionScope.user.avatarURL}" alt="user's avatar" id="avatar">
                                     <ul class="user-dropdown">
                                         <li><a id="Manage" href="#">Manage Account</a></li>
                                         <li><a id="Logout" href="LoginServlet?action=logout">Logout</a></li>
@@ -68,7 +68,7 @@
             </div>
             <section class="body-text">
                     Name: ${novel.novelName}<br>
-                <img src="${pageContext.request.contextPath}/Covers/${novel.coverURL}" alt="Cover" id="cover"/><br>
+                <img src="${pageContext.request.contextPath}/images/covers/${novel.coverURL}" alt="Cover" id="cover"/><br>
                 Author: ${novel.author.getName()}<br>
                 Tags: 
                     <c:forEach items="${taglist}" var="tag">

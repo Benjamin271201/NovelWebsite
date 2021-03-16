@@ -50,7 +50,7 @@
                         </c:when>
                         <c:otherwise>
                                 <div class="user-mng">
-                                    <img src="${pageContext.request.contextPath}/avatars/${sessionScope.user.avatarURL}" alt="user" id="avatar">
+                                    <img src="${pageContext.request.contextPath}/images/avatars/${sessionScope.user.avatarURL}" alt="user" id="avatar">
                                     <ul class="user-dropdown">
                                         <li><a id="Manage" href="ManageAccountServlet">Manage Account</a></li>
                                         <li><a id="Logout" href="LoginServlet?action=logout">Logout</a></li>
@@ -71,7 +71,7 @@
             <table>
                 <tr>
                     <th>Profile picture: </th>
-                    <td><img src="${pageContext.request.contextPath}/avatars/${user.avatarURL}" id="avatar"/></td>
+                    <td><img src="${pageContext.request.contextPath}/images/avatars/${sessionScope.user.avatarURL}" id="avatar"/></td>
                 </tr>
                 <tr>
                     <th>Username: </th>
