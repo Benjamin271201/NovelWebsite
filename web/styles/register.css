@@ -9,6 +9,7 @@ and open the template in the editor.
 */
 fieldset{
     width: 50%;
+    margin: 0 auto;
 }
 
 .error{

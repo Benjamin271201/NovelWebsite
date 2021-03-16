@@ -68,7 +68,6 @@ public class NovelServlet extends HttpServlet {
         RequestDispatcher rd = null;
         CommentDAO cmDAO = new CommentDAO();
         HttpSession session = request.getSession(false);
-        Account user = (Account) session.getAttribute("user");
         //  a == null -> display website (index.jsp)
         if (action == null) {
             ArrayList<Novel> novelList = nDAO.getAllNovels();
@@ -153,7 +152,7 @@ public class NovelServlet extends HttpServlet {
             request.setAttribute("chapterlist", chapterList);
             request.setAttribute("novel", novelInfo);
             rd.forward(request, response);
-        } else if (user != null) {
+        } else if (session != null) {
             if (action.equals("n_form")) {
                 response.sendRedirect("insert_novel_form.jsp");
             } else if (action.equals("n_add")) {
@@ -169,6 +168,7 @@ public class NovelServlet extends HttpServlet {
                 if(coverURL.equals("")){
                     coverURL = "defaultCover.png";
                 }
+                Account user = (Account) session.getAttribute("user");
                 Novel newNovel = new Novel(novelID, novelName, 0, user, coverURL);
                 nDAO.addNovel(newNovel);
                 response.sendRedirect("NovelServlet");
