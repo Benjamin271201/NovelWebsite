@@ -75,6 +75,9 @@ public class ManageAccountServlet extends HttpServlet {
                 }
                 else{
                     Account acc;
+                    if(avatarURL.equals("")){
+                        avatarURL = user.getAvatarURL();
+                    }
                     if(user.isIsAdmin() == true){
                         acc = new Account(username, password, email, name, true, avatarURL);
                     }
@@ -108,7 +111,7 @@ public class ManageAccountServlet extends HttpServlet {
             Part filePart = request.getPart("avatar");
             fileName = (String)getFileName(filePart);
             String applicationPath = request.getServletContext().getRealPath("");
-            String basePath = applicationPath + File.separator + "avatars" + File.separator;
+            String basePath = applicationPath + File.separator + "images" + File.separator +"avatars" + File.separator;
             InputStream inputStream = null;
             OutputStream outputStream = null;
             try {

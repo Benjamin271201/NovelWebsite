@@ -38,11 +38,12 @@
                     <label>Email</label><br>
                     <input type="text" name="email" value="${email}" id="email"/>
                     <c:if test="${duplicatedEmail != null}">
-                        <div id="duplicatedEmailMsg" class="error">This email address has already been used</label>
+                        <div id="duplicatedEmailMsg" class="error">This email address has already been used</div>
                     </c:if>
                     <div id="emailMsg" style="visibility:hidden" class="error">
                         Invalid Email
                     </div>
+                </div>
                 <div>
                     <label>Password</label><br>
                     <input type="password" name="password" id="password"/>

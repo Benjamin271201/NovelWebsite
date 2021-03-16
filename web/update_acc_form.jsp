@@ -12,6 +12,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Update</title>
         <link rel="stylesheet" href="styles/index.css"/>
+        <link rel ="stylesheet" href="styles/register.css"/>
     </head>
     <body>
         <div class="navbar">
@@ -69,41 +70,49 @@
             <c:set var="user" value="${sessionScope.user}"/>
             <form action="ManageAccountServlet" method="POST" enctype="multipart/form-data" id="form">
                 <input type="hidden" name="a" value="update"/>
-                <table>
-                    <tr>
-                        <th>Username</th>
-                        <td><input type='text' value='${user.username}' name='username' readonly id="username"/></td>
-                    </tr>
-                    <tr>
-                        <th>Name</th>
-                        <td><input type='text' value='${user.name}' name='name' id="name"/></td>
-                    </tr>
-                    <tr>
-                        <th>Email</th>
-                        <td><input type='text' value='${user.email}' name='email' readonly id="email"</td>
-                    </tr>
-                    <tr>
-                        <th>Password</th>
-                        <td><input type='password' value='${user.password}' name='password' id="password"/></td>
-                    </tr>
-                    <tr id="passMsg" style="display:none">
-                        <td>Password can only be of length 5 to 32 characters</td>
-                    </tr>
-                    <tr>
-                        <th>Confirm password</th>
-                        <td><input type="password" name="conpass" id="confpassword" value="${user.password}"/></td>
-                    </tr>
-                    <tr id="confpassMsg" style="display:none">
-                        <td>Confirm password did not match</td>
-                    </tr>
-                    <tr>
-                        <th>Profile Picture</th>
-                        <td><img src="${pageContext.request.contextPath}/images/avatars/${user.avatarURL}" style="height: 50px; width: 50px;  border-radius: 50%; margin-top: 5px;"/><input type="file" name="avatar"/></td>
-                    </tr>
-                    <tr>
-                        <td><input type="submit" value="Update"/></td>
-                    </tr>
-                </table>
+                <fieldset>
+                    <legend><h1>Update Info</h1></legend>
+                <div>
+                    <label>Username</label><br>
+                    <input type="text" name="username" value="${user.username}" id="username" readonly/>
+                </div>
+                 <br>
+                <div>
+                    <label>Full name</label><br>
+                    <input type="text" name="name" value="${user.name}" id="name"/>
+                </div>
+                <div id="nameMsg" style="visibility:hidden" class="error">
+                        Full name can not be empty
+                </div>
+                <div>
+                    <label>Email</label><br>
+                    <input type="text" name="email" value="${user.email}" id="email" readonly/>
+                </div>
+                     <br>
+                <div>
+                    <label>Password</label><br>
+                    <input type="password" name="password" id="password" value="${user.password}"/>
+                </div>
+                <div id="passMsg" style="visibility:hidden" class="error">
+                    Password can only be of length 5 to 32 characters
+                </div>
+                <div>
+                    <label>Confirm password</label><br>
+                    <input type="password" name="conpass" id="confpassword" value=""/>
+                </div>
+                <div id="confpassMsg" style="visibility:hidden" class="error">
+                    Confirm password did not match
+                </div>
+                <div>
+                    <label>Avatar</label>
+                    <img src="${pageContext.request.contextPath}/images/avatars/${user.avatarURL}" id="avatar" style="margin:0"/>
+                    <input type="file" name="avatar"/>
+                </div>
+                <div>
+                    <input type="submit" value="Update" id="submitBtn"/>
+                    <button type="button"><a href="NovelServlet">Cancel</a></button>
+                </div>
+            </fieldset>
             </form>
         </section>
         <script src="js/script.js" defer></script>

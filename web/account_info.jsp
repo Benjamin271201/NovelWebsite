@@ -71,7 +71,7 @@
             <table>
                 <tr>
                     <th>Profile picture: </th>
-                    <td><img src="${pageContext.request.contextPath}/images/avatars/${sessionScope.user.avatarURL}" id="avatar"/></td>
+                    <td><img src="${pageContext.request.contextPath}/images/avatars/${user.avatarURL}" id="avatar"/></td>
                 </tr>
                 <tr>
                     <th>Username: </th>
@@ -84,16 +84,6 @@
                 <tr>
                     <th>Email: </th>
                     <td>${user.email}</td>
-                </tr>
-                <tr>
-                    <th>Novels</th>
-                    <td>
-                        <ul>
-                            <c:forEach items="${nList}" var="n">
-                                <li><a href="ChapterServlet?nid=${n.novelID}">${n.novelName}</a></li>
-                            </c:forEach>
-                        </ul>
-                    </td>
                 </tr>
                 <tr>
                     <td>
