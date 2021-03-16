@@ -8,37 +8,40 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-   <body>
-       <c:choose>
-           <c:when test="${success == null}">
-               <p></p>
-           </c:when>
-           <c:otherwise>
-               <c:if test="${success == false}">
-                    <p style="color:red">username or password is invalid</p>
-               </c:if>
-           </c:otherwise>
-       </c:choose>
-       
-        <form action="LoginServlet" name="f1" method="POST">
-            <table>
-                <tr>
-                    <th>Username</th>
-                    <td><input type="text" name="username" value=""/></td>
-                </tr>
-                 <tr>
-                    <th>Password</th>
-                    <td><input type="password" name="password" value=""/></td>
-                </tr>
-                <tr>
-                    <td><input type="submit" name="action" value="login"/></td>
-                </tr>
-            </table>
-        </form>
-        <p>Don't have an account ? <a href="RegisterServlet">Register</a></p>
-    </body>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+                <title>Login Form</title>
+                <link rel="stylesheet" type="text/css" href="styles/login.css"> 
+        </head>
+        <body>
+                <div id="container" class="modal">      
+                        <form class="modal-content animate" action="LoginServlet" method="post">
+                                <input type="hidden" name="action" value="login">
+                                <c:choose>
+                                        <c:when test="${success == null}">
+                                                <p></p>
+                                        </c:when>
+                                        <c:otherwise>
+                                                <c:if test="${success == false}">
+                                                        <p class="alert">Username or password is incorrect</p>
+                                                </c:if>
+                                        </c:otherwise>
+                                </c:choose>
+                                <h1 class="modal-title">Login Form</h1>
+                                <div class="container">
+                                        <label for="username"><b>Username</b></label>
+                                        <input type="text" placeholder="Username" name="username" required>
+
+                                        <label for="password"><b>Password</b></label>
+                                        <input type="password" placeholder="Password" name="password" required>
+
+                                        <button type="submit">Login</button>
+                                </div>
+                                <div class="footer">
+                                        <span class="psw">Not registered? <a href="RegisterServlet">Create an account</a></span>
+                                        <a class="goback" style="display: block;" href="NovelServlet"><b>&laquo; Click here to go back</b></a>
+                                </div>
+                        </form>
+                </div>
+        </body>
 </html>
