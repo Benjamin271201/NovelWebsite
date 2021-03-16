@@ -17,5 +17,6 @@
         <h2>${ACCOUNTNOTFOUNDERROR}</h2>
         <h2>${DUPLICATEDEMAILERROR}</h2>
         <h2>${UPDATEFAILDERROR}</h2>
+        <h2>${TAGNOTFOUNDERROR}</h2>
     </body>
 </html>
