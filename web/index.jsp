@@ -84,6 +84,9 @@
                                 <img src="${pageContext.request.contextPath}/images/covers/${novel.coverURL}" width="50%"/><br>
                                 <a class="n-title" href="NovelServlet?a=novel_info&n=${novel.novelID}" style="font-size: 120%">${novel.novelName}</a> 
                                 <p style="font-size:75%">${novel.author.getUsername()}</p>
+                                   <c:if test="${addFlag != null}">
+                                       <a href="ChapterServlet?a=addchapform&nid=${novel.novelID}">Add a new Chapter</a>
+                                   </c:if>
                             </li>    
                         </c:forEach>
                     </ul>

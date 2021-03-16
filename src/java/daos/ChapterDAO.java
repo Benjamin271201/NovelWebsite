@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import utils.DBConnect;
 
@@ -107,6 +106,30 @@ public class ChapterDAO {
             }
         }
         return null;
+    }
+    
+    public boolean addChapter(Chapter chap){
+        Connection con = null;
+        PreparedStatement ps = null;
+        String sql = "insert into Chapter(chapterID, novelID, chapterName, fileURL, uploadDate)"
+                + "values(?, ?, ?, ?, ?)";
+        try {
+            con = DBConnect.makeConnection();
+            if(con != null){
+                ps = con.prepareStatement(sql);
+                ps.setString(1, chap.getChapterID());
+                ps.setString(2, chap.getNovel().getNovelID());
+                ps.setString(3, chap.getChapterName());
+                ps.setString(4, chap.getFileURL());
+                ps.setDate(5, chap.getUploadDate());
+                ps.executeUpdate();
+                return true;
+            }
+        } 
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
     }
     
     public static void main(String[] args) {

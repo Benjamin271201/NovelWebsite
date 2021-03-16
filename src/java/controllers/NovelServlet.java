@@ -176,11 +176,12 @@ public class NovelServlet extends HttpServlet {
                 String username = request.getParameter("u");
                 ArrayList<Novel> lst = nDAO.getUserNovels(username);
                 if (lst.size() > 0) {
+                    request.setAttribute("addFlag", "addFlag");
                     request.setAttribute("novelListObj", lst);
                 } else {
                     request.setAttribute("NONOVELERROR", "No novels could be found");
                 }
-                rd = request.getRequestDispatcher("NovelServlet?");
+                rd = request.getRequestDispatcher("index.jsp");
                 rd.forward(request, response);
             }
         } else {
