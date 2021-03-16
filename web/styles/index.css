@@ -161,8 +161,8 @@ li:hover {
 }
 
 .body-text {
-    z-index: 0;
     margin-top: 2.8rem;
+    z-index: 0;
 }
 
 .side-box {
@@ -195,4 +195,16 @@ li:hover {
     overflow: hidden;
     text-overflow: ellipsis;
     display: inherit;
+}
+
+.changeChapter{
+    position: absolute;
+    right: 150px;
+    background-color: green;
+    padding: 1rem;
+    border-radius: 50%;
+}
+
+.chapterList{
+    text-decoration: underline;
 }

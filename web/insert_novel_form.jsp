@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Insert Novel</title>
         <link rel="stylesheet" type="text/css" href="styles/index.css"> 
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     </head>
@@ -59,23 +59,35 @@
             </div>
         </div>
         <section id="body-text" style="margin-top: 6%">
-            <h1>Add a novel</h1>
-            <form action="NovelServlet" enctype="multipart/form-data" method="POST">
+         
+            <form action="NovelServlet" enctype="multipart/form-data" method="POST" id='form'>
                 <input type="hidden" value="n_add" name="a">
-                <table>
-                    <tr>
-                        <th>Novel name</th>
-                        <td><input type="text" name="novelName"/></td>
-                    </tr>
-                    <tr>
-                        <th>Cover</th>
-                        <td><input type="file" name="coverURL" id="coverURL"/></td>
-                    </tr>
-                    <tr>
-                        <td><input type="submit" value="Add"/></td>
-                    </tr>
-                </table>
+                <fieldset>
+                    <legend><h1>Add a novel</h1></legend>
+                    <div>
+                        <p>Novel name</p>
+                        <p><input type="text" name="novelName" id='novelName'/> <label style="visibility: hidden; color: red" id='msg'>Novel name can't be empty</label></p>
+                    </div>
+                    <div>
+                        <p>Cover</p>
+                        <p><input type="file" name="coverURL" id="coverURL"/></p>
+                    </div>
+                    <div>
+                        <p><input type="submit" value="Add"/> <button><a href="NovelServlet" style="text-decoration: none; color: black"/>Cancel</a></button></p>
+                    </div>
+                </fieldset>
             </form>
         </section>
+                    <script defer>
+                        const form = document.getElementById("form");
+                        const novelName = document.getElementById("novelName");
+                        const msg = document.getElementById("msg");
+                        form.addEventListener('submit', event=>{
+                            if(novelName.value === ""){
+                                event.preventDefault();
+                                msg.style.visibility = "visible";
+                            }
+                        });
+                    </script>
     </body>
 </html>

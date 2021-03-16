@@ -171,6 +171,7 @@ public class NovelServlet extends HttpServlet {
                 Account user = (Account) session.getAttribute("user");
                 Novel newNovel = new Novel(novelID, novelName, 0, user, coverURL);
                 nDAO.addNovel(newNovel);
+                createFolder(novelID);
                 response.sendRedirect("NovelServlet");
             } else if (action.equals("display")) {
                 String username = request.getParameter("u");
@@ -194,6 +195,9 @@ public class NovelServlet extends HttpServlet {
         List<String> linesList = new ArrayList<>();
         try {
             linesList = Files.readAllLines(path, StandardCharsets.UTF_8);
+            for (String string : linesList) {
+                System.out.println(string);
+            }
             return linesList;
         } catch (Exception e) {
             e.printStackTrace();
