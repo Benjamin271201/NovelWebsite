@@ -238,4 +238,50 @@ public class NovelDAO {
         return lst;
     }
 
+    public Novel getNovelByNameAndUsername(String novelName, String username){
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String sql = "SELECT * FROM Novel WHERE name=? AND author=?";
+        try {
+            con = DBConnect.makeConnection();
+            if (con != null) {
+                ps = con.prepareStatement(sql);
+                ps.setString(1, novelName);
+                ps.setString(2, username);
+                rs = ps.executeQuery();
+                if (rs.next()) {
+                    String novelID = rs.getString("novelID");
+                    int rating = rs.getInt("rating");
+                    String coverURL = rs.getString("coverURL");
+                    AccountDAO accDAO = new AccountDAO();
+                    Account acc = accDAO.getAccountByUsername(username);
+                    Novel n = new Novel(novelID, novelName, rating, acc, coverURL);
+                    return n;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+    public static void main(String[] args) {
+        NovelDAO nDAO = new NovelDAO();
+        System.out.println(nDAO.getNovelByNameAndUsername("Scarface", "admin").getNovelID());
+    }
 }

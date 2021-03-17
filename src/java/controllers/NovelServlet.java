@@ -65,15 +65,14 @@ public class NovelServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         String info = "novel_info.jsp";
         String action = request.getParameter("a");
-        
+
         NovelDAO nDAO = new NovelDAO();
         TagDAO tDAO = new TagDAO();
         ChapterDAO cDAO = new ChapterDAO();
         RequestDispatcher rd = null;
         CommentDAO cmDAO = new CommentDAO();
         BookmarkDAO bDAO = new BookmarkDAO();
-        
-        
+
         HttpSession session = request.getSession(false);
         //  a == null -> display website (index.jsp)
         if (action == null) {
@@ -148,8 +147,7 @@ public class NovelServlet extends HttpServlet {
             request.setAttribute("currChap", currChap);
             request.setAttribute("chapLines", linesFromFile);
             request.getRequestDispatcher("chapter.jsp").forward(request, response);
-        }
-        // a == novel_info -> display novel info
+        } // a == novel_info -> display novel info
         else if (action.equals("novel_info")) {
             String novelID = (String) request.getParameter("n");
             ArrayList<Tag> tagList = tDAO.getTagList(novelID);
@@ -166,26 +164,33 @@ public class NovelServlet extends HttpServlet {
             request.setAttribute("novel", novelInfo);
             rd.forward(request, response);
         } else if (session != null) {
+            Account user = (Account) session.getAttribute("user");
             if (action.equals("n_form")) {
                 response.sendRedirect("insert_novel_form.jsp");
             } else if (action.equals("n_add")) {
                 String novelName = request.getParameter("novelName");
                 String coverURL = uploadFile(request);
                 ArrayList<Novel> nList = nDAO.getAllNovels();
-                String novelID = "N1";
-                for (Novel novel : nList) {
-                    if (novel.getNovelID().equalsIgnoreCase(novelID)) {
-                        novelID = "N" + (Integer.parseInt(novelID.substring(1)) + 1);
+                Novel dupNovel = nDAO.getNovelByNameAndUsername(novelName, user.getUsername());
+                if (dupNovel != null) {
+                    request.setAttribute("DUPLICATEDNOVELERROR", "This Novel name has already been added by you. Do you want to add a chapter to this novel ?");
+                    request.setAttribute("dupNovelObj", dupNovel);
+                    request.getRequestDispatcher("insert_novel_form.jsp").forward(request, response);
+                } else {
+                    String novelID = "N1";
+                    for (Novel novel : nList) {
+                        if (novel.getNovelID().equalsIgnoreCase(novelID)) {
+                            novelID = "N" + (Integer.parseInt(novelID.substring(1)) + 1);
+                        }
                     }
+                    if (coverURL.equals("")) {
+                        coverURL = "defaultCover.png";
+                    }
+                    Novel newNovel = new Novel(novelID, novelName, 0, user, coverURL);
+                    nDAO.addNovel(newNovel);
+                    createFolder(novelID);
+                    response.sendRedirect("NovelServlet");
                 }
-                if(coverURL.equals("")){
-                    coverURL = "defaultCover.png";
-                }
-                Account user = (Account) session.getAttribute("user");
-                Novel newNovel = new Novel(novelID, novelName, 0, user, coverURL);
-                nDAO.addNovel(newNovel);
-                createFolder(novelID);
-                response.sendRedirect("NovelServlet");
             } else if (action.equals("display")) {
                 String username = request.getParameter("u");
                 ArrayList<Novel> lst = nDAO.getUserNovels(username);

@@ -64,6 +64,10 @@
                 <input type="hidden" value="n_add" name="a">
                 <fieldset>
                     <legend><h1>Add a novel</h1></legend>
+                    <c:if test="${DUPLICATEDNOVELERROR != null}">
+                        <p style="color: red">${DUPLICATEDNOVELERROR}</p>
+                        <button><a href="ChapterServlet?a=addchapform&nid=${dupNovelObj.novelID}">Add a new Chapter</a></button>
+                    </c:if>
                     <div>
                         <p>Novel name</p>
                         <p><input type="text" name="novelName" id='novelName'/> <label style="visibility: hidden; color: red" id='msg'>Novel name can't be empty</label></p>
