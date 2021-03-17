@@ -58,8 +58,26 @@
                 </form>
             </div>
         </div>
-        <section class="body-text">
             <c:set var="user" value="${sessionScope.user}"></c:set>
+            <div class="n-container">
+                <c:if test="${novelListObj != null}">
+                    <ul class="n-list">
+                        <c:forEach items="${novelListObj}" var="novel">
+                            <li class="n-listitem">
+                                <img class="cover" src="${pageContext.request.contextPath}/images/covers/${novel.coverURL}"/>
+                                <a class="n-title" href="NovelServlet?a=novel_info&n=${novel.novelID}">${novel.novelName}</a> 
+                                <p>${novel.author.getUsername()}</p>
+                                   <c:if test="${addFlag != null}">
+                                       <a href="ChapterServlet?a=addchapform&nid=${novel.novelID}">Add a new Chapter</a>
+                                   </c:if>
+                            </li>    
+                        </c:forEach>
+                    </ul>
+                </c:if>
+                <c:if test="${NONOVELERROR != null}">
+                    <h2 style="color:red">${NONOVELERROR}</h2>
+                </c:if>
+            </div>
             <c:choose>
                 <c:when test="${user != null}">
                     <div class="side-box">
@@ -76,25 +94,5 @@
                     </div>
                 </c:otherwise> 
             </c:choose>
-            <div class="n-container">
-                <c:if test="${novelListObj != null}">
-                    <ul class="n-list">
-                        <c:forEach items="${novelListObj}" var="novel">
-                            <li class="n-listitem">
-                                <img src="${pageContext.request.contextPath}/images/covers/${novel.coverURL}" width="50%"/><br>
-                                <a class="n-title" href="NovelServlet?a=novel_info&n=${novel.novelID}" style="font-size: 120%">${novel.novelName}</a> 
-                                <p style="font-size:75%">${novel.author.getUsername()}</p>
-                                   <c:if test="${addFlag != null}">
-                                       <a href="ChapterServlet?a=addchapform&nid=${novel.novelID}">Add a new Chapter</a>
-                                   </c:if>
-                            </li>    
-                        </c:forEach>
-                    </ul>
-                </c:if>
-                <c:if test="${NONOVELERROR != null}">
-                    <h2 style="color:red">${NONOVELERROR}</h2>
-                </c:if>
-            </div>
-        </section>
     </body>
 </html>
