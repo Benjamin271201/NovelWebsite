@@ -280,6 +280,54 @@ public class NovelDAO {
         }
         return null;
     }
+    
+    public ArrayList<Novel> getNovelListByID(ArrayList<String> idList){
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<Novel> lst = new ArrayList<>();
+        AccountDAO accDAO = new AccountDAO();
+        
+        String sql = "SELECT * FROM Novel WHERE novelID=?";
+        try {
+            con = DBConnect.makeConnection();
+            if (con != null) {
+                ps = con.prepareStatement(sql);
+                for (String id:idList) {
+                    ps.setString(1, id);
+                    rs = ps.executeQuery();
+                    if (rs.next()) {
+                        String novelName = rs.getString("name");
+                        int rating = rs.getInt("rating");
+                        String coverURL = rs.getString("coverURL");
+                        String author = rs.getString("author");
+                        Account acc = accDAO.getAccountByUsername(author);
+                        Novel n = new Novel(id, novelName, rating, acc, coverURL);
+                        lst.add(n);
+                    }
+                }
+                return lst;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return lst;
+    }
+    
     public static void main(String[] args) {
         NovelDAO nDAO = new NovelDAO();
         System.out.println(nDAO.getNovelByNameAndUsername("Scarface", "admin").getNovelID());

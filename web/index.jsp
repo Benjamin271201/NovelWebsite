@@ -74,11 +74,16 @@
                     </c:forEach>
                 </ul>
             </c:if>
+            <%--if your novel list is empty--%>
             <c:if test="${NONOVELERROR != null}">
                 <h2 style="color:red">${NONOVELERROR}</h2>
                 <c:if test="${flag != null}">
                     <h1 style="text-align: center"><a href="NovelServlet?a=n_form" style="font-size: 250%; border: dashed 7px; line-height: 5; padding: 10%;">Add novel here</a></h1>
                 </c:if>
+            </c:if>
+            <%--if bookmark list is empty--%>
+            <c:if test="${EMPTYBOOKMARK != null}">
+                <h2 style="color:red">${EMPTYBOOKMARK}</h2>
             </c:if>
         </div>
         <c:choose>
@@ -86,7 +91,7 @@
                 <div class="side-box">
                     <a href="NovelServlet?a=n_form">Add a novel</a><br>
                     <a href="NovelServlet?a=display&u=${user.username}">Your novels</a><br>
-                    <a href="NovelServlet?a=bookmarked">Bookmark</a><br>
+                    <a href="BookmarkServlet?a=bookmark_list">Bookmark</a><br>
                 </div>
             </c:when>
             <c:otherwise>

@@ -6,9 +6,12 @@
 package controllers;
 
 import daos.BookmarkDAO;
+import daos.NovelDAO;
 import dtos.Account;
+import dtos.Novel;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -38,16 +41,38 @@ public class BookmarkServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession();
             Account user = (Account) session.getAttribute("user");
-            String novelID = request.getParameter("novelID");
+            String novelID = request.getParameter("id");
             String SUCCESS = "NovelServlet";
             String ERROR = "error.jsp";
-            BookmarkDAO dao = new BookmarkDAO();
+            BookmarkDAO bdao = new BookmarkDAO();
+            NovelDAO ndao = new NovelDAO();
+            String action = request.getParameter("a");
             
-            if (dao.bookmarkHandler(user.getUsername(), novelID)) {
-                request.getRequestDispatcher("NovelServlet?a=novel_info&n=" + novelID).forward(request, response);
+            //  action == null -> add/remove bookmark of a novel
+            if (action == null) {
+                if (user != null) {
+                    if (bdao.bookmarkHandler(user.getUsername(), novelID)) {
+                        request.getRequestDispatcher("NovelServlet?a=novel_info&n=" + novelID).forward(request, response);
+                    }
+                    else {
+                        response.sendRedirect(ERROR);
+                    }
+                }
+                else {
+                    response.sendRedirect("login_form.jsp");
+                }
             }
-            else {
-                response.sendRedirect(ERROR);
+            else if (action.equals("bookmark_list")) {
+                ArrayList<String> idList = bdao.getBookmarkIDList(user);
+                ArrayList<Novel> nList = ndao.getNovelListByID(idList);
+                if (nList.size() > 0) {
+                    request.setAttribute("addFlag", "addFlag");
+                    request.setAttribute("novelListObj", nList);
+                } else {
+                    request.setAttribute("EMPTYBOOKMARK", "You haven't bookmarked any novel yet!");
+                    request.setAttribute("flag", "");
+                }
+                request.getRequestDispatcher("index.jsp").forward(request, response);     
             }
         }
         catch (Exception e) {

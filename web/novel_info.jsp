@@ -70,10 +70,10 @@
                 <c:otherwise>
                     <c:choose>
                         <c:when test="${!requestScope.bookmark}">
-                            <a href='BookmarkServlet'><button>Bookmark</button></a><br>
+                            <a href='BookmarkServlet?id=${novel.novelID}'><button>Bookmark</button></a><br>
                         </c:when>
                         <c:otherwise>
-                            <a href='BookmarkServlet'><button style="background-color: #90DFAA">Bookmarked</button></a><br>
+                            <a href='BookmarkServlet?id=${novel.novelID}'><button style="background-color: #90DFAA">Bookmarked</button></a><br>
                         </c:otherwise>
                     </c:choose>
                 </c:otherwise>            
