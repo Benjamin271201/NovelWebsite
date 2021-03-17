@@ -60,7 +60,25 @@
             </div>
         </div>
         <section class="body-text">
-            Name: ${novel.novelName}<br>
+            Name: ${novel.novelName} 
+            
+            <%-- bookmark button
+                if visitor -> Bookmark(grey)
+                if user hasn't bookmarked ? Bookmark(grey) : Bookmarked(green) --%>
+            <c:choose>
+                <c:when test="${sessionScope.user == null}"><a href='LoginServlet'><button>Bookmark</button></a><br></c:when>
+                <c:otherwise>
+                    <c:choose>
+                        <c:when test="${!requestScope.bookmark}">
+                            <a href='BookmarkServlet'><button>Bookmark</button></a><br>
+                        </c:when>
+                        <c:otherwise>
+                            <a href='BookmarkServlet'><button style="background-color: #90DFAA">Bookmarked</button></a><br>
+                        </c:otherwise>
+                    </c:choose>
+                </c:otherwise>            
+            </c:choose>
+            
             <img src="${pageContext.request.contextPath}/images/covers/${novel.coverURL}" alt="Cover" id="cover"/><br>
             Author: ${novel.author.getName()}<br>
             Tags: 

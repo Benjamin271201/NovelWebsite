@@ -8,6 +8,18 @@
         <servlet-name>NovelServlet</servlet-name>
         <servlet-class>controllers.NovelServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RegisterServlet</servlet-name>
+        <servlet-class>controllers.RegisterServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CommentServlet</servlet-name>
+        <servlet-class>controllers.CommentServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BookmarkServlet</servlet-name>
+        <servlet-class>controllers.BookmarkServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -16,9 +28,26 @@
         <servlet-name>NovelServlet</servlet-name>
         <url-pattern>/NovelServlet</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RegisterServlet</servlet-name>
+        <url-pattern>/RegisterServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CommentServlet</servlet-name>
+        <url-pattern>/CommentServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookmarkServlet</servlet-name>
+        <url-pattern>/BookmarkServlet</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
+    <welcome-file-list>
+        <welcome-file>
+            NovelServlet
+        </welcome-file>
+    </welcome-file-list>
 </web-app>

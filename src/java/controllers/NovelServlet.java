@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import daos.BookmarkDAO;
 import daos.ChapterDAO;
 import daos.CommentDAO;
 import daos.NovelDAO;
@@ -62,14 +63,19 @@ public class NovelServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         String info = "novel_info.jsp";
         String action = request.getParameter("a");
+        
         NovelDAO nDAO = new NovelDAO();
         TagDAO tDAO = new TagDAO();
         ChapterDAO cDAO = new ChapterDAO();
         RequestDispatcher rd = null;
         CommentDAO cmDAO = new CommentDAO();
+        BookmarkDAO bDAO = new BookmarkDAO();
+        
+        
         HttpSession session = request.getSession(false);
         //  a == null -> display website (index.jsp)
         if (action == null) {
+            System.out.println(action);
             ArrayList<Novel> novelList = nDAO.getAllNovels();
             request.setAttribute("novelListObj", novelList);
             ArrayList<Tag> tagList = tDAO.getAllTags();
@@ -142,11 +148,16 @@ public class NovelServlet extends HttpServlet {
             request.getRequestDispatcher("chapter.jsp").forward(request, response);
         }
         // a == novel_info -> display novel info
-        if (action.equals("novel_info")) {
+        else if (action.equals("novel_info")) {
             String novelID = (String) request.getParameter("n");
             ArrayList<Tag> tagList = tDAO.getTagList(novelID);
             Novel novelInfo = nDAO.getNovel(novelID);
+            Account user = (Account) session.getAttribute("user");
             LinkedList<Chapter> chapterList = cDAO.getChapters(novelID);
+            if (user != null) {
+                boolean isBookmarked = bDAO.isBookmarked(user.getUsername(), novelID);
+                request.setAttribute("bookmark", isBookmarked);
+            }
             rd = request.getRequestDispatcher(info);
             request.setAttribute("taglist", tagList);
             request.setAttribute("chapterlist", chapterList);
