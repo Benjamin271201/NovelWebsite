@@ -9,11 +9,15 @@ import daos.ChapterDAO;
 import daos.NovelDAO;
 import dtos.Chapter;
 import dtos.Novel;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
-import java.util.Calendar;
 import java.util.LinkedList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -43,26 +47,26 @@ public class ChapterServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String action = request.getParameter("a");
         HttpSession session = request.getSession(false);
-        if(session == null){
+        if (session == null) {
             response.sendRedirect("LoginServlet");
-        }
-        else{
-            if(action.equals("addchapform")){
+        } else {
+            if (action.equals("addchapform")) {
                 String nid = request.getParameter("nid");
                 NovelDAO nDAO = new NovelDAO();
                 Novel novel = nDAO.getNovel(nid);
                 request.setAttribute("novelObj", novel);
                 request.getRequestDispatcher("chap_form.jsp").forward(request, response);
-            }
-            else if(action.equals("add")){
+            } else if (action.equals("add")) {
                 String novelID = request.getParameter("nid");
                 String chapID = "C1";
                 String chapName = request.getParameter("chapname");
                 String content = request.getParameter("content");
+                byte[] bytes = content.getBytes(StandardCharsets.ISO_8859_1);
+                content = new String(bytes, StandardCharsets.UTF_8);
                 ChapterDAO cDAO = new ChapterDAO();
                 LinkedList<Chapter> chapList = cDAO.getChapters(novelID);
                 for (Chapter chapter : chapList) {
-                    if(chapID.equalsIgnoreCase(chapter.getChapterID())){
+                    if (chapID.equalsIgnoreCase(chapter.getChapterID())) {
                         chapID = "C" + (Integer.parseInt(chapID.substring(1)) + 1);
                     }
                 }
@@ -72,31 +76,36 @@ public class ChapterServlet extends HttpServlet {
                 java.sql.Date uploadDate = new Date(System.currentTimeMillis());
                 Chapter chap = new Chapter(chapID, n, chapName, fileURL, uploadDate);
                 boolean create = createFile(chap, content);
-                if(create == false){
+                if (create == false) {
                     response.sendRedirect("error.jsp");
-                }
-                else{
+                } else {
                     cDAO.addChapter(chap);
                     response.sendRedirect("NovelServlet");
                 }
             }
         }
     }
-    
-    public boolean createFile(Chapter chap, String content){
+
+    public boolean createFile(Chapter chap, String content) throws FileNotFoundException, IOException {
         String filepath = getServletContext().getRealPath("") + "/Novels/" + chap.getNovel().getNovelID() + "/" + chap.getFileURL();
-        try {
-            File f = new File(filepath);
-            if(f.exists()){
-                return false;
-            }
-            else{
-                FileWriter fw = new FileWriter(f);
-                fw.write(content);
-                fw.close();
+        File f = new File(filepath);
+        if (f.exists()) {
+            return false;
+        } else {
+//                FileWriter fw = new FileWriter(f).;
+//                fw.write(content);
+//                fw.close();
+//                return true;
+            try {
+                Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f), StandardCharsets.UTF_8));
+                out.append(content);
+                out.flush();
+                out.close();
                 return true;
+            }catch(FileNotFoundException e){
+                log("ERRORWRITEFILE: " + e.getMessage());
             }
-        } catch (IOException e) {
+
         }
         return false;
     }
