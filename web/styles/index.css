@@ -27,7 +27,7 @@ a {
 }
 
 .navbar {
-    position: fixed;
+    position: sticky;
     background-color: rgb(212, 212, 212);
     width: 100%;
     float: none;
