@@ -194,6 +194,7 @@ public class NovelServlet extends HttpServlet {
                     request.setAttribute("novelListObj", lst);
                 } else {
                     request.setAttribute("NONOVELERROR", "No novels could be found");
+                    request.setAttribute("flag", "");
                 }
                 rd = request.getRequestDispatcher("index.jsp");
                 rd.forward(request, response);

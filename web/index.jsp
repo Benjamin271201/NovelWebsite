@@ -58,41 +58,44 @@
                 </form>
             </div>
         </div>
-            <c:set var="user" value="${sessionScope.user}"></c:set>
+        <c:set var="user" value="${sessionScope.user}"></c:set>
             <div class="n-container">
-                <c:if test="${novelListObj != null}">
-                    <ul class="n-list">
-                        <c:forEach items="${novelListObj}" var="novel">
-                            <li class="n-listitem">
-                                <img class="cover" src="${pageContext.request.contextPath}/images/covers/${novel.coverURL}"/>
-                                <a class="n-title" href="NovelServlet?a=novel_info&n=${novel.novelID}">${novel.novelName}</a> 
-                                <p>${novel.author.getUsername()}</p>
-                                   <c:if test="${addFlag != null}">
-                                       <a href="ChapterServlet?a=addchapform&nid=${novel.novelID}">Add a new Chapter</a>
-                                   </c:if>
-                            </li>    
-                        </c:forEach>
-                    </ul>
+            <c:if test="${novelListObj != null}">
+                <ul class="n-list">
+                    <c:forEach items="${novelListObj}" var="novel">
+                        <li class="n-listitem">
+                            <img class="cover" src="${pageContext.request.contextPath}/images/covers/${novel.coverURL}"/>
+                            <a class="n-title" href="NovelServlet?a=novel_info&n=${novel.novelID}">${novel.novelName}</a> 
+                            <p>${novel.author.getUsername()}</p>
+                            <c:if test="${addFlag != null}">
+                                <a href="ChapterServlet?a=addchapform&nid=${novel.novelID}">Add a new Chapter</a>
+                            </c:if>
+                        </li>    
+                    </c:forEach>
+                </ul>
+            </c:if>
+            <c:if test="${NONOVELERROR != null}">
+                <h2 style="color:red">${NONOVELERROR}</h2>
+                <c:if test="${flag != null}">
+                    <h1 style="text-align: center"><a href="NovelServlet?a=n_form" style="font-size: 250%; border: dashed 7px; line-height: 5; padding: 10%;">Add novel here</a></h1>
                 </c:if>
-                <c:if test="${NONOVELERROR != null}">
-                    <h2 style="color:red">${NONOVELERROR}</h2>
-                </c:if>
-            </div>
-            <c:choose>
-                <c:when test="${user != null}">
-                    <div class="side-box">
-                        <a href="NovelServlet?a=n_form">Add a novel</a><br>
-                        <a href="NovelServlet?a=display&u=${user.username}">Your novels</a><br>
-                        <a href="NovelServlet?a=bookmarked">Bookmark</a><br>
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <div class="side-box">
-                        <a href="LoginServlet">Add a novel</a><br>
-                        <a href="LoginServlet">Your novels</a><br>
-                        <a href="LoginServlet">Bookmark</a><br>
-                    </div>
-                </c:otherwise> 
-            </c:choose>
+            </c:if>
+        </div>
+        <c:choose>
+            <c:when test="${user != null}">
+                <div class="side-box">
+                    <a href="NovelServlet?a=n_form">Add a novel</a><br>
+                    <a href="NovelServlet?a=display&u=${user.username}">Your novels</a><br>
+                    <a href="NovelServlet?a=bookmarked">Bookmark</a><br>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <div class="side-box">
+                    <a href="LoginServlet">Add a novel</a><br>
+                    <a href="LoginServlet">Your novels</a><br>
+                    <a href="LoginServlet">Bookmark</a><br>
+                </div>
+            </c:otherwise> 
+        </c:choose>
     </body>
 </html>

@@ -60,7 +60,11 @@
             </div>
         </div>
         <section id="body-text">
-            <div>
+            <div style="text-align: center">
+                <h1 style="font-size: 120%">Novel: ${currNovel.novelName}</h1>
+                <h2>Chapter: ${currChap.chapterName}</h2>
+            </div>
+            <div style="width: 75%; margin: 0 auto; text-align: justify">
                 <c:forEach items="${chapLines}" var="line">
                     ${line} <br>
                 </c:forEach>
