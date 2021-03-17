@@ -37,7 +37,7 @@
             <c:choose>
                 <c:when test="${sessionScope.user == null}">
                     <div class="login">
-                        <button><a href="login_form.jsp" class="login-btn">Login</a></button>
+                        <button><a href="LoginServlet" class="login-btn">Login</a></button>
                     </div>
                 </c:when>
                 <c:otherwise>
