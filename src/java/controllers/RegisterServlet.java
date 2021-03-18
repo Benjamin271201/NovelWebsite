@@ -29,15 +29,15 @@ import javax.servlet.http.Part;
  *
  * @author chiuy
  */
-
 @WebServlet(name = "RegisterServlet", urlPatterns = {"/RegisterServlet"})
 @MultipartConfig(
-        fileSizeThreshold = 10*1024*1024,
-        maxFileSize = 1024*1024*50,
+        fileSizeThreshold = 10 * 1024 * 1024,
+        maxFileSize = 1024 * 1024 * 50,
         maxRequestSize = 1024 * 1024 * 100
 )
 
 public class RegisterServlet extends HttpServlet {
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -50,66 +50,61 @@ public class RegisterServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-       String action = request.getParameter("action");
-       PrintWriter out = response.getWriter();
-       
-       //if a==null -> redirect to register_form.html
-       if(action == null){
-           response.sendRedirect("register_form.jsp");
-       }
-       
-       //if a.equals("register") 
-       else if(action.equals("register")){
-           String username = request.getParameter("username");
-           String password = request.getParameter("password");
-           String email = request.getParameter("email");
-           String name = request.getParameter("name");
-           String avatarURL = uploadFile(request);
-           
-           //search for duplicated username in database
-           AccountDAO dao = new AccountDAO();
-           Account foundAccount = dao.getAccountByUsername(username);
-           Account foundAccountByEmail = dao.getAccountbyEmail(email);
-           
-           //if foundAccount!= null -> dispatch to register_form, keep all inputted values except password
-           if(foundAccount != null){
-               request.setAttribute("username", username);
-               request.setAttribute("email", email);
-               request.setAttribute("name", name);
-               request.setAttribute("avatar", avatarURL);
-               request.setAttribute("duplicatedUser", foundAccount);
-               request.getRequestDispatcher("register_form.jsp").forward(request, response);
-           }
-           if(foundAccountByEmail != null){
-               request.setAttribute("username", username);
-               request.setAttribute("email", email);
-               request.setAttribute("name", name);
-               request.setAttribute("avatar", avatarURL);
-               request.setAttribute("duplicatedEmail", foundAccountByEmail);
-               request.getRequestDispatcher("register_form.jsp").forward(request, response);
-           }
-           
-           //else -> add account to database, set session, then redirect to NovelServlet
-           else{
-               if(avatarURL.equals("")){
-                   avatarURL = "defaultAvatar.jpg";
-               }
-               Account newAccount = new Account(username, password, email, name, false, avatarURL);
-               AccountDAO aDAO = new AccountDAO();
-               aDAO.addAccount(newAccount);
-               HttpSession session = request.getSession();
-               session.setAttribute("user", newAccount);
-               response.sendRedirect("NovelServlet");
-           }
-       }
+        String action = request.getParameter("action");
+        PrintWriter out = response.getWriter();
+
+        //if a==null -> redirect to register_form.html
+        if (action == null) {
+            response.sendRedirect("register_form.jsp");
+        } //if a.equals("register") 
+        else if (action.equals("register")) {
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            String email = request.getParameter("email");
+            String name = request.getParameter("name");
+            String avatarURL = uploadFile(request);
+
+            //search for duplicated username in database
+            AccountDAO dao = new AccountDAO();
+            Account foundAccount = dao.getAccountByUsername(username);
+            Account foundAccountByEmail = dao.getAccountbyEmail(email);
+
+            //if foundAccount!= null -> dispatch to register_form, keep all inputted values except password
+            if (foundAccount != null) {
+                request.setAttribute("username", username);
+                request.setAttribute("email", email);
+                request.setAttribute("name", name);
+                request.setAttribute("avatar", avatarURL);
+                request.setAttribute("duplicatedUser", foundAccount);
+                request.getRequestDispatcher("register_form.jsp").forward(request, response);
+            } else if (foundAccountByEmail != null) {
+                request.setAttribute("username", username);
+                request.setAttribute("email", email);
+                request.setAttribute("name", name);
+                request.setAttribute("avatar", avatarURL);
+                request.setAttribute("duplicatedEmail", foundAccountByEmail);
+                request.getRequestDispatcher("register_form.jsp").forward(request, response);
+            } //else -> add account to database, set session, then redirect to NovelServlet
+            else {
+                if (avatarURL.equals("")) {
+                    avatarURL = "defaultAvatar.png";
+                }
+                Account newAccount = new Account(username, password, email, name, false, avatarURL);
+                AccountDAO aDAO = new AccountDAO();
+                aDAO.addAccount(newAccount);
+                HttpSession session = request.getSession();
+                session.setAttribute("user", newAccount);
+                response.sendRedirect("NovelServlet");
+            }
+        }
     }
-    
-    private String uploadFile(HttpServletRequest request) throws IOException, ServletException{
+
+    private String uploadFile(HttpServletRequest request) throws IOException, ServletException {
         String fileName = "";
         try {
             Part filePart = request.getPart("avatar");
-            fileName = (String)getFileName(filePart);
-            
+            fileName = (String) getFileName(filePart);
+
             String applicationPath = request.getServletContext().getRealPath("");
             String basePath = applicationPath + File.separator + "images" + File.separator + "avatars" + File.separator;
             InputStream inputStream = null;
@@ -120,29 +115,30 @@ public class RegisterServlet extends HttpServlet {
                 outputStream = new FileOutputStream(outputFilePath);
                 int read = 0;
                 final byte[] bytes = new byte[1024];
-                while((read = inputStream.read(bytes)) != -1){
+                while ((read = inputStream.read(bytes)) != -1) {
                     outputStream.write(bytes, 0, read);
                 }
-            } 
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 fileName = "";
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+                if (outputStream != null) {
+                    outputStream.close();
+                }
             }
-            finally{
-                if(inputStream != null) inputStream.close();
-                if(outputStream != null) outputStream.close();
-            }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             fileName = "";
         }
         return fileName;
     }
-    
-    private String getFileName(Part part){
+
+    private String getFileName(Part part) {
         for (String content : part.getHeader("content-disposition").split(";")) {
-            if(content.trim().startsWith("filename")){
-                return content.substring(content.indexOf('=')+1).trim().replace("\"", "");
+            if (content.trim().startsWith("filename")) {
+                return content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
             }
         }
         return null;

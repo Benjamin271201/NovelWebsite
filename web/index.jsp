@@ -61,7 +61,7 @@
         <c:set var="user" value="${sessionScope.user}"></c:set>
             <div class="n-container">
             <c:if test="${tag != null}">
-                <h2>${tag.tagName}</h2>
+                <h1>Category: ${tag.tagName}</h1>
             </c:if>
             <c:if test="${novelListObj != null}">
                 <ul class="n-list">

@@ -19,12 +19,12 @@
             <form action="RegisterServlet" method="POST" enctype="multipart/form-data" id="form" class="modal-content animate">
                 <input type="hidden" name="action" value="register"/>
                 <h1 class="modal-title">Register</h1>
-                <c:if test="${duplicatedUser != null}">
-                    <div style="margin-bottom: 6px;">This username already exists</div>
-                </c:if>
                 <div>
                     <label>Username</label>
                     <input type="text" name="username" value="${username}" id="username" />
+                    <c:if test="${duplicatedUser != null}">
+                        <span id="dupUser" style="color:red">This username already exists</span>
+                    </c:if>
                 </div>
                 <div id="usernameMsg" style="visibility: hidden" class="error">
                     Username can only be of length 4 to 20 characters

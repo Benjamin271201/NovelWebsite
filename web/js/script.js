@@ -64,6 +64,7 @@ email.addEventListener('input', () =>{
 
 username.addEventListener('input', () =>{
    document.getElementById("usernameMsg").style.visibility = 'hidden'; 
+   document.getElementById("dupUser").remove();
 });
 
 name.addEventListener('input', () =>{

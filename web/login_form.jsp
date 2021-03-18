@@ -30,7 +30,7 @@
                                 <h1 class="modal-title">Login Form</h1>
                                 <div class="container">
                                         <label for="username"><b>Username</b></label>
-                                        <input type="text" placeholder="Username" name="username" required>
+                                        <input type="text" placeholder="Username" name="username" <c:if test="${username != null}">value="${username}" </c:if> required>
 
                                         <label for="password"><b>Password</b></label>
                                         <input type="password" placeholder="Password" name="password" required>

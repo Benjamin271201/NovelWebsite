@@ -81,9 +81,9 @@
             <div id="commentSection">
                 <h3>Comments</h3>
                 <c:if test="${sessionScope.user != null}">
-                    <div id="commentInput">
-                        <form action="CommentServlet" method="POST">
-                            Comment <textarea name="context"></textarea> <br>
+                    <div>
+                        <form action="CommentServlet" method="POST" id="form">
+                            Comment <textarea name="context" placeholder="Maximum 200 characters" id="cmtInput"></textarea><span style="visibility:hidden; color:red" id="cmtMsg">Maximum: 200 characters</span> <br>
                             <input type="hidden" name="chapterID" value="${currChap.chapterID}"/>
                             <input type="hidden" name="novelID" value="${currNovel.novelID}"/>
                             <input type="submit" value="Submit"/>
@@ -110,7 +110,7 @@
                                         <td>${comment.user.username}</td>
                                         <td>${comment.context}</td>
                                         <td>${comment.commentDate}</td>
-                                        <c:if test="${sessionScope.user.isAdmin == true}">
+                                        <c:if test="${sessionScope.user.isAdmin == true || sessionScope.user.username.equals(comment.user.username)}">
                                             <td><a href="CommentServlet?a=delete&cmid=${comment.commentID}&nid=${currNovel.novelID}&cid=${currChap.chapterID}">delete</a></td>
                                         </c:if>
                                     </tr>
@@ -121,5 +121,16 @@
                 </c:choose>
             </div>
         </section>
+            <script defer>
+                const input = document.getElementById("cmtInput");
+                const form = document.getElementById("form");
+                form.addEventListener('click', event =>{
+                    if(input.value.length<1) event.preventDefault();
+                    else if(input.value.length > 200){
+                        event.preventDefault();
+                        document.getElementById("cmtMsg").style.visibility = "visible";
+                    }
+                });
+            </script>
     </body>
 </html>
