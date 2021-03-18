@@ -109,20 +109,21 @@ public class CommentDAO {
         PreparedStatement ps = null;
         LinkedList<Comment> lst = this.getAllComments();
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        String commentID = "CM1";
         Date date = new Date();
         String commentDate = format.format(date);
+        for (Comment comment : lst) {
+            if(comment.getCommentID().equalsIgnoreCase(commentID)){
+                commentID = "CM" + (Integer.parseInt(commentID.substring(2)) + 1);
+            }
+        }
         String sql = "INSERT INTO Comment(commentID, novelID, chapterID, username, context, commentDate)"
                 + "VALUES(?, ?, ?, ?, ?, ?)";
         try {
             con = DBConnect.makeConnection();
             if(con != null){
                 ps = con.prepareStatement(sql);
-                if(lst.size()>0){
-                    ps.setString(1,  "CM" + (Integer.parseInt(lst.getLast().getCommentID().substring(2)) +1));
-                }
-                else{
-                    ps.setString(1, "CM1");
-                }
+                ps.setString(1, commentID);
                 ps.setString(2, novelID);
                 ps.setString(3, chapterID);
                 ps.setString(4, username);

@@ -15,16 +15,14 @@ import java.util.ArrayList;
 public class Novel {
     private String novelID;
     private String novelName;
-    private int rating;
     private Account author;
     private String coverURL;
 
     public Novel(){}
 
-    public Novel(String novelID, String novelName, int rating, Account author, String coverURL) {
+    public Novel(String novelID, String novelName, Account author, String coverURL) {
         this.novelID = novelID;
         this.novelName = novelName;
-        this.rating = rating;
         this.author = author;
         this.coverURL = coverURL;
     }
@@ -43,14 +41,6 @@ public class Novel {
 
     public void setNovelName(String novelName) {
         this.novelName = novelName;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
     }
 
     public Account getAuthor() {

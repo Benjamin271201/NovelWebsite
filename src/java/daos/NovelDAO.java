@@ -34,12 +34,11 @@ public class NovelDAO {
                 while (rs.next()) {
                     String novelID = rs.getString("novelID");
                     String novelName = rs.getString("name");
-                    int rating = rs.getInt("rating");
                     String author = rs.getString("author");
                     String coverURL = rs.getString("coverURL");
                     AccountDAO accDAO = new AccountDAO();
                     Account acc = accDAO.getAccountByUsername(author);
-                    Novel n = new Novel(novelID, novelName, rating, acc, coverURL);
+                    Novel n = new Novel(novelID, novelName, acc, coverURL);
                     lst.add(n);
                 }
             }
@@ -78,12 +77,11 @@ public class NovelDAO {
                 rs = ps.executeQuery();
                 if (rs.next()) {
                     String novelName = rs.getString("name");
-                    int rating = rs.getInt("rating");
                     String author = rs.getString("author");
                     String coverURL = rs.getString("coverURL");
                     AccountDAO accDAO = new AccountDAO();
                     Account acc = accDAO.getAccountByUsername(author);
-                    Novel n = new Novel(novelID, novelName, rating, acc, coverURL);
+                    Novel n = new Novel(novelID, novelName, acc, coverURL);
                     return n;
                 }
             }
@@ -110,17 +108,16 @@ public class NovelDAO {
     public boolean addNovel(Novel n) {
         Connection con = null;
         PreparedStatement ps = null;
-        String sql = "INSERT INTO Novel(novelID, name, rating, author, coverURL)"
-                + "VALUES(?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Novel(novelID, name, author, coverURL)"
+                + "VALUES(?, ?, ?, ?)";
         try {
             con = DBConnect.makeConnection();
             if (con != null) {
                 ps = con.prepareStatement(sql);
                 ps.setString(1, n.getNovelID());
                 ps.setString(2, n.getNovelName());
-                ps.setInt(3, n.getRating());
-                ps.setString(4, n.getAuthor().getUsername());
-                ps.setString(5, n.getCoverURL());
+                ps.setString(3, n.getAuthor().getUsername());
+                ps.setString(4, n.getCoverURL());
 
                 ps.executeUpdate();
                 return true;
@@ -156,11 +153,10 @@ public class NovelDAO {
                 while (rs.next()) {
                     String novelID = rs.getString("novelID");
                     String novelName = rs.getString("name");
-                    int rating = rs.getInt("rating");
                     String coverURL = rs.getString("coverURL");
                     AccountDAO accDAO = new AccountDAO();
                     Account acc = accDAO.getAccountByUsername(username);
-                    Novel n = new Novel(novelID, novelName, rating, acc, coverURL);
+                    Novel n = new Novel(novelID, novelName, acc, coverURL);
                     lst.add(n);
                 }
             }
@@ -199,12 +195,11 @@ public class NovelDAO {
                 while (rs.next()) {
                     String novelID = rs.getString("novelID");
                     String novelName = rs.getString("name");
-                    int rating = rs.getInt("rating");
                     String author = rs.getString("author");
                     String coverURL = rs.getString("coverURL");
                     AccountDAO accDAO = new AccountDAO();
                     Account acc = accDAO.getAccountByUsername(author);
-                    Novel n = new Novel(novelID, novelName, rating, acc, coverURL);
+                    Novel n = new Novel(novelID, novelName, acc, coverURL);
                     lst.add(n);
                 }
             }
@@ -253,11 +248,10 @@ public class NovelDAO {
                 rs = ps.executeQuery();
                 if (rs.next()) {
                     String novelID = rs.getString("novelID");
-                    int rating = rs.getInt("rating");
                     String coverURL = rs.getString("coverURL");
                     AccountDAO accDAO = new AccountDAO();
                     Account acc = accDAO.getAccountByUsername(username);
-                    Novel n = new Novel(novelID, novelName, rating, acc, coverURL);
+                    Novel n = new Novel(novelID, novelName, acc, coverURL);
                     return n;
                 }
             }
@@ -298,11 +292,10 @@ public class NovelDAO {
                     rs = ps.executeQuery();
                     if (rs.next()) {
                         String novelName = rs.getString("name");
-                        int rating = rs.getInt("rating");
                         String coverURL = rs.getString("coverURL");
                         String author = rs.getString("author");
                         Account acc = accDAO.getAccountByUsername(author);
-                        Novel n = new Novel(id, novelName, rating, acc, coverURL);
+                        Novel n = new Novel(id, novelName, acc, coverURL);
                         lst.add(n);
                     }
                 }
@@ -327,9 +320,37 @@ public class NovelDAO {
         }
         return lst;
     }
-    
-    public static void main(String[] args) {
-        NovelDAO nDAO = new NovelDAO();
-        System.out.println(nDAO.getNovelByNameAndUsername("Scarface", "admin").getNovelID());
+        
+    public boolean addTagMap(String novelID, String tagID){
+        Connection con = null;
+        PreparedStatement ps = null;
+        String sql = "INSERT INTO TagMap(novelID, tagID)"
+                + "VALUES(?, ?)";
+        try {
+            con = DBConnect.makeConnection();
+            if(con != null){
+                ps = con.prepareStatement(sql);
+                ps.setString(1, novelID);
+                ps.setString(2, tagID);
+                ps.executeUpdate();
+                return true;
+            }
+        } 
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        finally{
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return false;
     }
 }

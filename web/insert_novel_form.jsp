@@ -5,6 +5,7 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page buffer="none" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,6 +14,16 @@
         <link rel="stylesheet" type="text/css" href="styles/index.css"> 
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     </head>
+    <style>
+        .selected{
+            background-color: orange;
+            border: 0.5px solid black;
+            border-radius: 30%;
+        }
+        label{
+            line-height: 2rem;
+        }
+    </style>
     <body>
         <div class="navbar">
             <img src="images/logo.svg" alt="Logo-unclickable" id="logo">
@@ -59,7 +70,7 @@
             </div>
         </div>
         <section id="body-text" style="margin-top: 6%">
-         
+
             <form action="NovelServlet" enctype="multipart/form-data" method="POST" id='form'>
                 <input type="hidden" value="n_add" name="a">
                 <fieldset>
@@ -70,11 +81,22 @@
                     </c:if>
                     <div>
                         <p>Novel name</p>
-                        <p><input type="text" name="novelName" id='novelName'/> <label style="visibility: hidden; color: red" id='msg'>Novel name can't be empty</label></p>
+                        <p><input type="text" name="novelName" id='novelName' value="${novelName}"/> <label style="visibility: hidden; color: red" id='msg'>Novel name can't be empty</label></p>
                     </div>
                     <div>
                         <p>Cover</p>
                         <p><input type="file" name="coverURL" id="coverURL"/></p>
+                    </div>
+                    <div>
+                        <p>Tags</p>
+                        <c:if test="${TAGERROR != null}">
+                            <p style="color:red">${TAGERROR}</p>
+                        </c:if>
+                        <c:forEach items="${applicationScope.tagListObj}" var="tag">
+                            <label for="${tag.tagID}" class="tagname">${tag.tagName}</label>
+                            <input type="checkbox" class="tagItem" style="border: 1px solid black; visibility: hidden" name="tag" value="${tag.tagID}" id="${tag.tagID}"/>
+                        </c:forEach>
+
                     </div>
                     <div>
                         <p><input type="submit" value="Add"/> <button><a href="NovelServlet" style="text-decoration: none; color: black"/>Cancel</a></button></p>
@@ -82,16 +104,22 @@
                 </fieldset>
             </form>
         </section>
-                    <script defer>
-                        const form = document.getElementById("form");
-                        const novelName = document.getElementById("novelName");
-                        const msg = document.getElementById("msg");
-                        form.addEventListener('submit', event=>{
-                            if(novelName.value === ""){
-                                event.preventDefault();
-                                msg.style.visibility = "visible";
-                            }
-                        });
-                    </script>
+        <script defer>
+            const form = document.getElementById("form");
+            const novelName = document.getElementById("novelName");
+            const msg = document.getElementById("msg");
+            const tagName = document.querySelectorAll(".tagname");
+            tagName.forEach(button => {
+                button.addEventListener('click', () => {
+                    button.classList.toggle("selected");
+                });
+            });
+            form.addEventListener('submit', event => {
+                if (novelName.value === "") {
+                    event.preventDefault();
+                    msg.style.visibility = "visible";
+                }
+            });
+        </script>
     </body>
 </html>
