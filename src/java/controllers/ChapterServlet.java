@@ -63,6 +63,7 @@ public class ChapterServlet extends HttpServlet {
                 String content = request.getParameter("content");
                 byte[] bytes = content.getBytes(StandardCharsets.ISO_8859_1);
                 content = new String(bytes, StandardCharsets.UTF_8);
+                chapName = new String(chapName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                 ChapterDAO cDAO = new ChapterDAO();
                 LinkedList<Chapter> chapList = cDAO.getChapters(novelID);
                 for (Chapter chapter : chapList) {

@@ -85,13 +85,14 @@ public class NovelServlet extends HttpServlet {
             rd.forward(request, response);
         } else if (action.equals("searchname")) {
             String name = request.getParameter("nameSearch");
+            name = new String(name.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
             ArrayList<Novel> lstName = nDAO.searchNovelByName(name);
             if (lstName.size() > 0) {
                 request.setAttribute("novelListObj", lstName);
             } else {
                 request.setAttribute("NONOVELERROR", "No novels could be found");
             }
-            rd = request.getRequestDispatcher("NovelServlet?");
+            rd = request.getRequestDispatcher("index.jsp");
             rd.forward(request, response);
         } else if (action.equals("searchtag")) {
             String tagID = request.getParameter("id");
@@ -186,6 +187,7 @@ public class NovelServlet extends HttpServlet {
                     if (coverURL.equals("")) {
                         coverURL = "defaultCover.png";
                     }
+                    novelName = new String(novelName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                     Novel newNovel = new Novel(novelID, novelName, 0, user, coverURL);
                     nDAO.addNovel(newNovel);
                     createFolder(novelID);
