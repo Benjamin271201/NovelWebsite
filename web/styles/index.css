@@ -202,13 +202,18 @@ li:hover {
         flex-direction: column;
         float:right;
         width: 25%;
-        margin-top: 2%;
+        margin-top: 1.5%;
 }
 
 .side-box > a {
+        border-radius: 10px;
         line-height: 60px;
         margin: 14px 17px;
         display: block;
         background-color: #ffffff;
         border: 1px solid black;
+}
+
+.side-box > a:hover {
+        background-color: antiquewhite;
 }
