@@ -26,7 +26,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
@@ -73,15 +72,14 @@ public class NovelServlet extends HttpServlet {
         RequestDispatcher rd = null;
         CommentDAO cmDAO = new CommentDAO();
         BookmarkDAO bDAO = new BookmarkDAO();
+        ArrayList<Tag> tagList = tDAO.getAllTags();
+        getServletContext().setAttribute("tagListObj", tagList);
 
         HttpSession session = request.getSession(false);
         //  a == null -> display website (index.jsp)
         if (action == null) {
-            System.out.println(action);
             ArrayList<Novel> novelList = nDAO.getAllNovels();
             request.setAttribute("novelListObj", novelList);
-            ArrayList<Tag> tagList = tDAO.getAllTags();
-            getServletContext().setAttribute("tagListObj", tagList);
             rd = request.getRequestDispatcher("index.jsp");
             rd.forward(request, response);
         } else if (action.equals("searchname")) {
@@ -101,6 +99,7 @@ public class NovelServlet extends HttpServlet {
                 ArrayList<Novel> novelTagLst = nDAO.searchNovelByTag(tagID);
                 if (novelTagLst.size() > 0) {
                     request.setAttribute("novelListObj", novelTagLst);
+                    request.setAttribute("tag", tDAO.getTag(tagID));
                 } else {
                     request.setAttribute("NONOVELERROR", "No novels could be found");
                 }
@@ -151,7 +150,7 @@ public class NovelServlet extends HttpServlet {
         } // a == novel_info -> display novel info
         else if (action.equals("novel_info")) {
             String novelID = (String) request.getParameter("n");
-            ArrayList<Tag> tagList = tDAO.getTagList(novelID);
+            ArrayList<Tag> tList = tDAO.getTagList(novelID);
             Novel novelInfo = nDAO.getNovel(novelID);
             Account user = (Account) session.getAttribute("user");
             LinkedList<Chapter> chapterList = cDAO.getChapters(novelID);
@@ -160,7 +159,7 @@ public class NovelServlet extends HttpServlet {
                 request.setAttribute("bookmark", isBookmarked);
             }
             rd = request.getRequestDispatcher(info);
-            request.setAttribute("taglist", tagList);
+            request.setAttribute("taglist", tList);
             request.setAttribute("chapterlist", chapterList);
             request.setAttribute("novel", novelInfo);
             rd.forward(request, response);
@@ -173,13 +172,12 @@ public class NovelServlet extends HttpServlet {
                 String coverURL = uploadFile(request);
                 ArrayList<Novel> nList = nDAO.getAllNovels();
                 String[] tagNameList = request.getParameterValues("tag");
-                if(tagNameList== null || tagNameList.length > 5){
+                if (tagNameList == null || tagNameList.length > 5) {
                     request.setAttribute("TAGERROR", "Please choose between 1 and 5 tags only");
                     request.setAttribute("novelName", novelName);
                     request.getRequestDispatcher("insert_novel_form.jsp").forward(request, response);
-                }
-                else if (nDAO.getNovelByNameAndUsername(novelName,user.getUsername()) != null) {
-                    Novel dupNovel = nDAO.getNovelByNameAndUsername(novelName,user.getUsername());
+                } else if (nDAO.getNovelByNameAndUsername(novelName, user.getUsername()) != null) {
+                    Novel dupNovel = nDAO.getNovelByNameAndUsername(novelName, user.getUsername());
                     request.setAttribute("DUPLICATEDNOVELERROR", "This Novel name has already been added by you. Do you want to add a chapter to this novel ?");
                     request.setAttribute("dupNovelObj", dupNovel);
                     request.setAttribute("novelName", novelName);
@@ -197,6 +195,7 @@ public class NovelServlet extends HttpServlet {
                     novelName = new String(novelName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                     Novel newNovel = new Novel(novelID, novelName, user, coverURL);
                     nDAO.addNovel(newNovel);
+                    createFolder(novelID);
                     for (String string : tagNameList) {
                         nDAO.addTagMap(novelID, string);
                     }
@@ -236,7 +235,8 @@ public class NovelServlet extends HttpServlet {
     }
 
     public void createFolder(String novelID) {
-        String path = getServletContext().getRealPath("") + "/Novels/" + novelID;
+        String path = getServletContext().getRealPath("") + "/novels/" + novelID;
+        System.out.println(path);
         File folder = new File(path);
         if (!folder.exists()) {
             folder.mkdir();

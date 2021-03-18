@@ -60,11 +60,14 @@
         </div>
         <c:set var="user" value="${sessionScope.user}"></c:set>
             <div class="n-container">
+            <c:if test="${tag != null}">
+                <h2>${tag.tagName}</h2>
+            </c:if>
             <c:if test="${novelListObj != null}">
                 <ul class="n-list">
                     <c:forEach items="${novelListObj}" var="novel">
                         <li class="n-listitem">
-                                <a href="NovelServlet?a=novel_info&n=${novel.novelID}"><img class="cover" src="${pageContext.request.contextPath}/images/covers/${novel.coverURL}"/></a>
+                            <a href="NovelServlet?a=novel_info&n=${novel.novelID}"><img class="cover" src="${pageContext.request.contextPath}/images/covers/${novel.coverURL}"/></a>
                             <a class="n-title" href="NovelServlet?a=novel_info&n=${novel.novelID}">${novel.novelName}</a> 
                             <p>${novel.author.getUsername()}</p>
                             <c:if test="${addFlag != null}">

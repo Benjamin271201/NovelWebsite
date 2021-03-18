@@ -85,7 +85,6 @@
             <c:forEach items="${taglist}" var="tag">
                 ${tag.tagName}
             </c:forEach> <br>
-            Rating: ${novel.rating}<br>        
             List of chapters: 
             <c:forEach items="${chapterlist}" var="chapter">
                 <a href="NovelServlet?a=read&n=${chapter.novel.novelID}&c=${chapter.chapterID}">${chapter.chapterName}</a>

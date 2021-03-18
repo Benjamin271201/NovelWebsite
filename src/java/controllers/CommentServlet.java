@@ -9,6 +9,7 @@ import daos.CommentDAO;
 import dtos.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -44,6 +45,7 @@ public class CommentServlet extends HttpServlet {
             String chapterID = request.getParameter("chapterID");
             String novelID = request.getParameter("novelID");
             String context =request.getParameter("context");
+            context = new String(context.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
             cmDAO.addComment(user.getUsername(), context, chapterID, novelID);
             response.sendRedirect("NovelServlet?a=read&n=" + novelID + "&c=" + chapterID);
 //            out.print(context);

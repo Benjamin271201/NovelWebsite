@@ -52,9 +52,9 @@
                 </c:otherwise>
             </c:choose>
             <div class="search-container">
-                <form action="search" method="post">
+                <form action="NovelServlet" method="post">
                     <input type="hidden" name="a" value="searchname"/>
-                    <input type="text" placeholder="Search.." id="search-bar">
+                    <input type="text" placeholder="Search.." id="search-bar" name="nameSearch">
                     <button id="search-btn" type="submit"><i class="fa fa-search"></i></button>
                 </form>
             </div>

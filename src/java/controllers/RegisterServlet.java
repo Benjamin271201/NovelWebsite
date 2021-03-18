@@ -30,15 +30,14 @@ import javax.servlet.http.Part;
  * @author chiuy
  */
 
+@WebServlet(name = "RegisterServlet", urlPatterns = {"/RegisterServlet"})
 @MultipartConfig(
         fileSizeThreshold = 10*1024*1024,
         maxFileSize = 1024*1024*50,
         maxRequestSize = 1024 * 1024 * 100
 )
-@WebServlet(name = "RegisterServlet", urlPatterns = {"/RegisterServlet"})
 
 public class RegisterServlet extends HttpServlet {
-    private static final String UPLOAD_DIR = "avatars";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -112,7 +111,7 @@ public class RegisterServlet extends HttpServlet {
             fileName = (String)getFileName(filePart);
             
             String applicationPath = request.getServletContext().getRealPath("");
-            String basePath = applicationPath + File.separator + "images" + File.separator + UPLOAD_DIR + File.separator;
+            String basePath = applicationPath + File.separator + "images" + File.separator + "avatars" + File.separator;
             InputStream inputStream = null;
             OutputStream outputStream = null;
             try {
