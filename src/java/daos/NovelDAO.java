@@ -233,7 +233,7 @@ public class NovelDAO {
         return lst;
     }
 
-    public Novel getNovelByNameAndUsername(String novelName, String username){
+    public Novel getNovelByNameAndUsername(String novelName, String username) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -274,20 +274,20 @@ public class NovelDAO {
         }
         return null;
     }
-    
-    public ArrayList<Novel> getNovelListByID(ArrayList<String> idList){
+
+    public ArrayList<Novel> getNovelListByID(ArrayList<String> idList) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         ArrayList<Novel> lst = new ArrayList<>();
         AccountDAO accDAO = new AccountDAO();
-        
+
         String sql = "SELECT * FROM Novel WHERE novelID=?";
         try {
             con = DBConnect.makeConnection();
             if (con != null) {
                 ps = con.prepareStatement(sql);
-                for (String id:idList) {
+                for (String id : idList) {
                     ps.setString(1, id);
                     rs = ps.executeQuery();
                     if (rs.next()) {
@@ -320,26 +320,24 @@ public class NovelDAO {
         }
         return lst;
     }
-        
-    public boolean addTagMap(String novelID, String tagID){
+
+    public boolean addTagMap(String novelID, String tagID) {
         Connection con = null;
         PreparedStatement ps = null;
         String sql = "INSERT INTO TagMap(novelID, tagID)"
                 + "VALUES(?, ?)";
         try {
             con = DBConnect.makeConnection();
-            if(con != null){
+            if (con != null) {
                 ps = con.prepareStatement(sql);
                 ps.setString(1, novelID);
                 ps.setString(2, tagID);
                 ps.executeUpdate();
                 return true;
             }
-        } 
-        catch (SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }
-        finally{
+        } finally {
             try {
                 if (ps != null) {
                     ps.close();
@@ -349,6 +347,43 @@ public class NovelDAO {
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteNovel(Novel n) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        String sql = "delete from Bookmark where novelID = ?\n"
+                + "delete from Comment where novelID = ?\n"
+                + "delete from Chapter where novelID =?\n"
+                + "delete from TagMap where novelID = ?\n"
+                + "delete from Novel where novelID = ?";
+
+        try {
+            con = DBConnect.makeConnection();
+            if (con != null) {
+                ps = con.prepareStatement(sql);
+                ps.setString(1, n.getNovelID());
+                ps.setString(2, n.getNovelID());
+                ps.setString(3, n.getNovelID());
+                ps.setString(4, n.getNovelID());
+                ps.setString(5, n.getNovelID());
+
+                ps.executeUpdate();
+                return true;
+            }
+        } catch (Exception e) {
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
             }
         }
         return false;

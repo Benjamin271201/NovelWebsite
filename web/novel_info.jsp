@@ -61,7 +61,7 @@
         </div>
         <section class="body-text">
             Name: ${novel.novelName} 
-            
+
             <%-- bookmark button
                 if visitor -> Bookmark(grey)
                 if user hasn't bookmarked ? Bookmark(grey) : Bookmarked(green) --%>
@@ -78,16 +78,21 @@
                     </c:choose>
                 </c:otherwise>            
             </c:choose>
-            
+
             <img src="${pageContext.request.contextPath}/images/covers/${novel.coverURL}" alt="Cover" id="cover"/><br>
-            Author: ${novel.author.getName()}<br>
+            Author: ${novel.author.name}<br>
             Tags: 
             <c:forEach items="${taglist}" var="tag">
                 ${tag.tagName}
             </c:forEach> <br>
             List of chapters: 
             <c:forEach items="${chapterlist}" var="chapter">
-                <a href="NovelServlet?a=read&n=${chapter.novel.novelID}&c=${chapter.chapterID}">${chapter.chapterName}</a>
+                <div>
+                    <a href="NovelServlet?a=read&n=${chapter.novel.novelID}&c=${chapter.chapterID}">${chapter.chapterName}</a>
+                    <c:if test="${sessionScope.user.username.equals(novel.author.username) || sessionScope.user.isAdmin==true}">
+                        <a href="ChapterServlet?a=del&cid=${chapter.chapterID}&nid=${chapter.novel.novelID}" onclick="return confirm('Are you sure ?')">Delete</a>
+                    </c:if>
+                </div>
             </c:forEach>
             <br>
         </section>

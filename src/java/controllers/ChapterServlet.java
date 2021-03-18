@@ -47,7 +47,7 @@ public class ChapterServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String action = request.getParameter("a");
         HttpSession session = request.getSession(false);
-        if (session == null) {
+        if (session.getAttribute("user") == null) {
             response.sendRedirect("LoginServlet");
         } else {
             if (action.equals("addchapform")) {
@@ -84,6 +84,21 @@ public class ChapterServlet extends HttpServlet {
                     response.sendRedirect("NovelServlet");
                 }
             }
+            else if(action.equals("del")){
+                String chapterID = request.getParameter("cid");
+                String novelID = request.getParameter("nid");
+                ChapterDAO cDAO = new ChapterDAO();
+                Chapter chap = cDAO.getChapterByChapterIDNovelID(novelID, chapterID);
+                if(chap != null){
+                    deleteChapFile(chap);
+                    cDAO.deleteChapter(chap);
+                    response.sendRedirect("NovelServlet?a=novel_info&n=" + chap.getNovel().getNovelID());
+                }
+                else{
+                    request.setAttribute("CHAPTERNOTFOUND", "Could not find this chapter");
+                    request.getRequestDispatcher("error.jsp").forward(request, response);
+                }
+            }
         }
     }
 
@@ -93,22 +108,24 @@ public class ChapterServlet extends HttpServlet {
         if (f.exists()) {
             return false;
         } else {
-//                FileWriter fw = new FileWriter(f).;
-//                fw.write(content);
-//                fw.close();
-//                return true;
             try {
                 Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f), StandardCharsets.UTF_8));
                 out.append(content);
                 out.flush();
                 out.close();
                 return true;
-            }catch(FileNotFoundException e){
+            } catch (FileNotFoundException e) {
                 log("ERRORWRITEFILE: " + e.getMessage());
             }
-
         }
         return false;
+    }
+    
+    public void deleteChapFile(Chapter chap){
+        String filepath = getServletContext().getRealPath("") + "/novels/" + chap.getNovel().getNovelID() + "/" + chap.getFileURL();
+        File file = new File(filepath);
+        if(!file.exists()) return;
+        else file.delete();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

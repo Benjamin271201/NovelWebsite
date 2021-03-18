@@ -37,6 +37,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 
 /**
  *
@@ -163,13 +164,12 @@ public class NovelServlet extends HttpServlet {
             request.setAttribute("chapterlist", chapterList);
             request.setAttribute("novel", novelInfo);
             rd.forward(request, response);
-        } else if (session != null) {
+        } else if (session.getAttribute("user") != null) {
             Account user = (Account) session.getAttribute("user");
             if (action.equals("n_form")) {
                 response.sendRedirect("insert_novel_form.jsp");
             } else if (action.equals("n_add")) {
                 String novelName = request.getParameter("novelName");
-                String coverURL = uploadFile(request);
                 ArrayList<Novel> nList = nDAO.getAllNovels();
                 String[] tagNameList = request.getParameterValues("tag");
                 if (tagNameList == null || tagNameList.length > 5) {
@@ -189,8 +189,12 @@ public class NovelServlet extends HttpServlet {
                             novelID = "N" + (Integer.parseInt(novelID.substring(1)) + 1);
                         }
                     }
+                    String coverURL = getFileName(request.getPart("coverURL"));
                     if (coverURL.equals("")) {
                         coverURL = "defaultCover.png";
+                    }
+                    else{
+                        coverURL = this.uploadFile(request, novelID);
                     }
                     novelName = new String(novelName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                     Novel newNovel = new Novel(novelID, novelName, user, coverURL);
@@ -213,6 +217,22 @@ public class NovelServlet extends HttpServlet {
                 }
                 rd = request.getRequestDispatcher("index.jsp");
                 rd.forward(request, response);
+            }
+            else if(action.equals("del")){
+                String novelID = request.getParameter("nid");
+                Novel n = nDAO.getNovel(novelID);
+                if(n ==  null){
+                    request.setAttribute("NOVELNOTFOUND", "Could not find this novel");
+                    request.getRequestDispatcher("error.jsp").forward(request, response);
+                }
+                else{
+                    if(!n.getCoverURL().equals("defaultCover.png")){
+                        deleteCover(novelID);
+                    }
+                    nDAO.deleteNovel(n);
+                    deleteFile(novelID);
+                    response.sendRedirect("NovelServlet");
+                }
             }
         } else {
             response.sendRedirect("LoginServlet");
@@ -242,13 +262,32 @@ public class NovelServlet extends HttpServlet {
             folder.mkdir();
         }
     }
+    
+    public void deleteFile(String novelID) throws IOException{
+        String filepath = getServletContext().getRealPath("") + "/novels/" + novelID;
+        File directory = new File(filepath);
+        if(!directory.exists()){
+            return;
+        }
+        else{
+            FileUtils.cleanDirectory(directory);
+            directory.delete();
+        }
+    }
+    
+    public void deleteCover(String novelID){
+        String filepath = getServletContext().getRealPath("") + "/images/covers/" + novelID + ".jpg";
+        File file = new File(filepath);
+        if(!file.exists()) return;
+        else file.delete();
+    }
 
-    private String uploadFile(HttpServletRequest request) throws IOException, ServletException {
+    private String uploadFile(HttpServletRequest request, String novelID) throws IOException, ServletException {
         String fileName = "";
         try {
             Part filePart = request.getPart("coverURL");
-            fileName = (String) getFileName(filePart);
-
+//            fileName = (String) getFileName(filePart);
+            fileName = novelID + ".jpg";
             String applicationPath = request.getServletContext().getRealPath("");
             String basePath = applicationPath + File.separator + "images" + File.separator + "covers" + File.separator;
             InputStream inputStream = null;
@@ -262,7 +301,7 @@ public class NovelServlet extends HttpServlet {
                 while ((read = inputStream.read(bytes)) != -1) {
                     outputStream.write(bytes, 0, read);
                 }
-            } catch (Exception e) {
+            } catch (IOException e) {
                 e.printStackTrace();
                 fileName = "";
             } finally {
@@ -273,7 +312,7 @@ public class NovelServlet extends HttpServlet {
                     outputStream.close();
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException | ServletException e) {
             fileName = "";
         }
         return fileName;
