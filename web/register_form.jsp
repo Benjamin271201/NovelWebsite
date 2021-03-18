@@ -8,67 +8,58 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-        <link rel="stylesheet" href="styles/register.css"/>
-    </head>
-    <body>
-        <c:if test="${duplicatedUser != null}">
-            <p>This username already exists</p>
-        </c:if>
-            <form action="RegisterServlet" melabelod="POST" enctype="multipart/form-data" id="form">
-                <fieldset>
-                    <legend><h1>Register</h1></legend>
-                <div>
-                    <label>Username</label><br>
-                    <input type="text" name="username" value="${username}" id="username"/>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+                <title>Register</title>
+                <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+                <link rel="stylesheet" href="styles/register.css"/>
+        </head>
+        <body>
+                <div class="modal">
+                        <form action="RegisterServlet" melabelod="POST" enctype="multipart/form-data" id="form" class="modal-content animate">
+                                <h1 class="modal-title">Register</h1>
+                                <c:if test="${duplicatedUser != null}">
+                                        <div style="margin-bottom: 6px;">This username already exists</div>
+                                </c:if>
+                                <div>
+                                        <label>Username</label>
+                                        <input type="text" name="username" value="${username}" id="username" />
+                                </div>
+                                <div id="usernameMsg" style="visibility: hidden" class="error">
+                                        Username can only be of length 4 to 20 characters
+                                </div>
+                                <label>Full name</label>
+                                <input type="text" name="name" value="${name}" id="name" />
+                                <div id="nameMsg" style="visibility:hidden" class="error">
+                                        Full name can not be empty
+                                </div>
+                                <label>Email</label>
+                                <input type="text" name="email" value="${email}" id="email" />
+                                <c:if test="${duplicatedEmail != null}">
+                                        <div id="duplicatedEmailMsg" class="error">This email address has already been used</div>
+                                </c:if>
+                                <div id="emailMsg" style="visibility:hidden" class="error">
+                                        Invalid Email
+                                </div>
+                                <label>Password</label>
+                                <input type="password" name="password" id="password" />
+                                <div id="passMsg" style="visibility:hidden" class="error">
+                                        Password can only be of length 5 to 32 characters
+                                </div>
+                                <label>Confirm password</label>
+                                <input type="password" name="conpass" id="confpassword" />
+                                <div id="confpassMsg" style="visibility:hidden" class="error">
+                                        Confirm password did not match
+                                </div>
+                                <label><b>Avatar</b></label>
+                                <input style="display: block" type="file" name="avatar" value="${avatar}" id="avatar" />
+                                <div class="footer">
+                                        <button type="submit">Register</button>
+                                        <a class="goback" style="display: block;" href="NovelServlet"><b>&laquo; Click here to go
+                                                        back</b></a>
+                                </div>
+                        </form>
                 </div>
-                <div id="usernameMsg" style="visibility: hidden" class="error">
-                    Username can only be of length 4 to 20 characters
-                </div>
-                <div>
-                    <label>Full name</label><br>
-                    <input type="text" name="name" value="${name}" id="name"/>
-                </div>
-                <div id="nameMsg" style="visibility:hidden" class="error">
-                        Full name can not be empty
-                </div>
-                <div>
-                    <label>Email</label><br>
-                    <input type="text" name="email" value="${email}" id="email"/>
-                    <c:if test="${duplicatedEmail != null}">
-                        <div id="duplicatedEmailMsg" class="error">This email address has already been used</div>
-                    </c:if>
-                    <div id="emailMsg" style="visibility:hidden" class="error">
-                        Invalid Email
-                    </div>
-                </div>
-                <div>
-                    <label>Password</label><br>
-                    <input type="password" name="password" id="password"/>
-                </div>
-                <div id="passMsg" style="visibility:hidden" class="error">
-                    Password can only be of length 5 to 32 characters
-                </div>
-                <div>
-                    <label>Confirm password</label><br>
-                    <input type="password" name="conpass" id="confpassword"/>
-                </div>
-                <div id="confpassMsg" style="visibility:hidden" class="error">
-                    Confirm password did not match
-                </div>
-                <div>
-                    <label>Avatar</label>
-                    <input type="file" name="avatar" value="${avatar}" id="avatar"/>
-                </div>
-                <div>
-                    <input type="submit" value="Register" id="submitBtn"/>
-                    <button type="button"><a href="NovelServlet">Cancel</a></button>
-                </div>
-            </fieldset>
-        </form>
-        <script src="js/script.js" defer></script>
-    </body>
+                <script src="js/script.js" defer></script>
+        </body>
 </html>
