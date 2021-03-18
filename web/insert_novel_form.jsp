@@ -90,7 +90,8 @@
 
                                 </div>
                                 <div class="footer">
-                                        <input type="submit" value="Add"/> <button><a href="NovelServlet" style="text-decoration: none; color: black"/>Cancel</a></button>
+                                        <input id="add" type="submit" value="Add"/> 
+                                        <button id="cancel"><a href="NovelServlet" style="text-decoration: none;">Cancel</a></button>
                                 </div>
                         </fieldset>
                 </form>
@@ -111,5 +112,5 @@
                                 }
                         });
                 </script>
-        </body>1        \
+        </body>
 </html>
