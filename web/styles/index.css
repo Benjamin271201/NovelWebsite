@@ -198,9 +198,7 @@ li:hover {
 }
 
 .side-box {
-        display: flex;
-        flex-direction: column;
-        float:right;
+        float: right;
         width: 25%;
         margin-top: 1.5%;
 }

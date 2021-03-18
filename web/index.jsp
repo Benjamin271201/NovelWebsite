@@ -51,9 +51,9 @@
                 </c:otherwise>
             </c:choose>
             <div class="search-container">
-                <form action="search" method="post">
+                <form action="NovelServlet" method="post">
                     <input type="hidden" name="a" value="searchname"/>
-                    <input type="text" placeholder="Search.." id="search-bar">
+                    <input type="text" placeholder="Search.." id="search-bar" name="nameSearch">
                     <button id="search-btn" type="submit"><i class="fa fa-search"></i></button>
                 </form>
             </div>
@@ -64,7 +64,7 @@
                 <ul class="n-list">
                     <c:forEach items="${novelListObj}" var="novel">
                         <li class="n-listitem">
-                            <img class="cover" src="${pageContext.request.contextPath}/images/covers/${novel.coverURL}"/>
+                                <a href="NovelServlet?a=novel_info&n=${novel.novelID}"><img class="cover" src="${pageContext.request.contextPath}/images/covers/${novel.coverURL}"/></a>
                             <a class="n-title" href="NovelServlet?a=novel_info&n=${novel.novelID}">${novel.novelName}</a> 
                             <p>${novel.author.getUsername()}</p>
                             <c:if test="${addFlag != null}">
