@@ -85,7 +85,6 @@
                             <input type="checkbox" class="tagItem" style="border: 1px solid black; visibility: hidden" name="tag" value="${tag.tagID}" id="${tag.tagID}"/>
                         </span>
                     </c:forEach>
-
                 </div>
                 <div class="footer">
                     <input id="add" type="submit" value="Add"/> 

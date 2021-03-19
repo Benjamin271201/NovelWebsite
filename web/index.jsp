@@ -63,6 +63,12 @@
             <c:if test="${tag != null}">
                 <h1 style="margin-left: 2%;">Category: ${tag.tagName}</h1>
             </c:if>
+            <c:if test="${BOOKMARKFLAG != null}">
+                <h1 style="color:red; font-size: 150%; text-align: center">${BOOKMARKFLAG}</h1>
+            </c:if>
+            <c:if test="${addFlag != null}">
+                <h1 style="color:red; font-size: 150%; text-align: center">Your Novels</h1>
+            </c:if>
             <c:if test="${novelListObj != null}">
                 <ul class="n-list">
                     <c:forEach items="${novelListObj}" var="novel">

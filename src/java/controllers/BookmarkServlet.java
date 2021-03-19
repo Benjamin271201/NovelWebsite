@@ -67,6 +67,7 @@ public class BookmarkServlet extends HttpServlet {
                 ArrayList<Novel> nList = ndao.getNovelListByID(idList);
                 if (nList.size() > 0) {
                     request.setAttribute("novelListObj", nList);
+                    request.setAttribute("BOOKMARKFLAG", "Your Bookmarks");
                 } else {
                     request.setAttribute("EMPTYBOOKMARK", "You haven't bookmarked any novel yet!");
                     request.setAttribute("flag", "");

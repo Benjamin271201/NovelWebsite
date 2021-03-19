@@ -3,7 +3,7 @@
     Created on : Mar 19, 2021, 3:29:17 PM
     Author     : Gray
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -60,13 +60,9 @@
     <c:set var="user" value="${sessionScope.user}"/>
     <form action="NovelServlet" method="POST" enctype="multipart/form-data" id="form">
         <input type="hidden" name="a" value="update"/>
-        <input type="hidden" name="nid" value="${n.novelID}"/>
+        <input type="hidden" name="nid" value="${n.novelID}" id="novelID" class="input" readonly/>
         <fieldset>
             <legend><h1>Update Novel</h1></legend>
-            <div>
-                <label>Novel ID</label><br>
-                <input type="text" name="nid" value="${n.novelID}" id="novelID" class="input" readonly/>
-            </div>
             <div>
                 <label>Novel Name</label><br>
                 <input type="text" name="novelName" value="${nName}" id="novelName" class="input"/>
@@ -78,6 +74,17 @@
                 <label>Cover</label><br>
                 <img src="${pageContext.request.contextPath}/images/covers/${n.coverURL}" id="avatar"/><br>
                 <input type="file" name="coverURL"/>
+            </div>
+            <div>
+                <label>Tags</label>
+                <div class="tagTable">
+                    <c:forEach items="${applicationScope.tagListObj}" var="tag">
+                        <span class="tag-item">
+                            <label for="${tag.tagID}" class="tagname">${tag.tagName}</label>
+                            <input type="checkbox" class="tagItem" style="border: 1px solid black; visibility: hidden" name="tag" value="${tag.tagID}" id="${tag.tagID}"/>
+                        </span>
+                    </c:forEach>
+                </div>
             </div>
             <div>
                 <input type="submit" value="Update" id="submitBtn"/>

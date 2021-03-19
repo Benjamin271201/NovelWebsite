@@ -14,6 +14,19 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="styles/index.css"> 
     </head>
+    <style>
+        .head{
+            font-weight: bold;
+        }
+        fieldset{
+            width: 30%;
+            background-color: white;
+            border-radius: 20px;
+            margin-left: 36%;
+            margin-right: auto;
+        }
+
+    </style>
     <body>
         <div class="navbar">
             <img src="images/logo.svg" alt="Logo-unclickable" id="logo">
@@ -61,30 +74,30 @@
         </div>
         <section class="body-text">
             <c:set var="user" value="${sessionScope.user}"/>
-            <h1>Account Information</h1>
-            <table>
-                <tr>
-                    <th>Profile picture: </th>
-                    <td><img src="${pageContext.request.contextPath}/images/avatars/${user.avatarURL}" id="avatar"/></td>
-                </tr>
-                <tr>
-                    <th>Username: </th>
-                    <td>${user.username}</td>
-                </tr>
-                <tr>
-                    <th>Name: </th>
-                    <td>${user.name}</td>
-                </tr>
-                <tr>
-                    <th>Email: </th>
-                    <td>${user.email}</td>
-                </tr>
-                <tr>
-                    <td>
+            <fieldset>
+                <legend><h1 style="font-size: 150%">Account Information</h1></legend>
+                <div>
+                    <p class="head">Profile picture: </p>
+                    <p><img src="${pageContext.request.contextPath}/images/avatars/${user.avatarURL}" id="avatar"/></p>
+                </div>
+                <div>
+                    <p class="head">Username: <p>
+                    <p>${user.username}</p>
+                </div>
+                <div>
+                    <p class="head">Name: </p>
+                    <p>${user.name}</p>
+                </div>
+                <div>
+                    <p class="head">Email: </p>
+                    <p>${user.email}</p>
+                </div>
+                <div>
+                    <p>
                         <button><a href="ManageAccountServlet?a=updateaccform">Change account's information</a></button>
-                    </td>
-                </tr>
-            </table>
+                    </p>
+                </div>
+            </fieldset>
         </section>
     </body>
 </html>
