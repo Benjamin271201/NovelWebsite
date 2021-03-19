@@ -6,7 +6,6 @@
 package daos;
 
 import dtos.Account;
-import dtos.Novel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
