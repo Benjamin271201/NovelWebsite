@@ -28,7 +28,7 @@
                                                 <div class=column>
                                                         <c:forEach items="${applicationScope.tagListObj}" var="tag" begin="${begin}" end="${end}">
                                                                 <li><a class="tag" href="NovelServlet?a=searchtag&id=${tag.tagID}"><c:out value="${tag.getTagName()}"/></a></li>
-                                                                </c:forEach>
+                                                        </c:forEach>
                                                 </div>
                                                 <c:set var="begin" value="${begin+7}"/>
                                                 <c:set var="end" value="${end+7}"/>
@@ -37,8 +37,8 @@
                         </div>
                         <c:choose>
                                 <c:when test="${sessionScope.user == null}">
-                                        <div >
-                                                <button class="login"><a href="LoginServlet" class="login-btn">Login</a></button>
+                                        <div class="login">
+                                                <button class="login-btn"><a href="LoginServlet">Login</a></button>
                                         </div>
                                 </c:when>
                                 <c:otherwise>
