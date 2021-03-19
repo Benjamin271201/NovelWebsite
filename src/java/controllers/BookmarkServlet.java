@@ -10,7 +10,6 @@ import daos.NovelDAO;
 import dtos.Account;
 import dtos.Novel;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -38,11 +37,10 @@ public class BookmarkServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+        try {
             HttpSession session = request.getSession();
             Account user = (Account) session.getAttribute("user");
             String novelID = request.getParameter("id");
-            String SUCCESS = "NovelServlet";
             String ERROR = "error.jsp";
             BookmarkDAO bdao = new BookmarkDAO();
             NovelDAO ndao = new NovelDAO();

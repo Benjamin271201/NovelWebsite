@@ -8,7 +8,6 @@ package controllers;
 import daos.CommentDAO;
 import dtos.Account;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -36,7 +35,6 @@ public class CommentServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
         String action = request.getParameter("a");
         if(action==null){
             CommentDAO cmDAO = new CommentDAO();
