@@ -235,27 +235,27 @@ public class NovelServlet extends HttpServlet {
                 }
             } else if (action.equals("update")) {
                 String novelID = request.getParameter("nid");
-                String novelName = request.getParameter("name");
-                String coverURL = getFileName(request.getPart("coverURL"));
+                String novelName = request.getParameter("novelName");
+                novelName = new String(novelName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                String coverURL = this.getFileName(request.getPart("coverURL"));
                 Novel n = nDAO.getNovel(novelID);
                 if (n == null) {
                     request.setAttribute("NOVELNOTFOUND", "Could not find this novel");
                     request.getRequestDispatcher("error.jsp").forward(request, response);
                 } else {
-                    if (!n.getCoverURL().equals("defaultCover.png")) {
-                        deleteCover(novelID);
+                    if (coverURL.equals("")) {
+                        coverURL = n.getCoverURL();
                     } else {
-                        if (coverURL.equals("")) {
-                            coverURL = "defaultCover.png";
-                        } else {
-                            coverURL = this.uploadFile(request, novelID);
-                        }
-                        n = new Novel(novelID, novelName, (Account) session.getAttribute("user"), coverURL);
-                        nDAO.updateNovel(n);
-                        response.sendRedirect("NovelServlet");
+                        if (!n.getCoverURL().equals("defaultCover.png")) {
+                            deleteCover(novelID);
+                        } 
+                        coverURL = uploadFile(request, n.getNovelID());
                     }
+                    n = new Novel(novelID, novelName, user, coverURL);
+                    nDAO.updateNovel(n);
+                    response.sendRedirect("NovelServlet");
                 }
-            } else if(action.equals("updateform")) {
+            } else if (action.equals("updateform")) {
                 String nid = request.getParameter("nid");
                 Novel n = nDAO.getNovel(nid);
                 request.setAttribute("n", n);
