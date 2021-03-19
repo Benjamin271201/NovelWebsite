@@ -290,9 +290,6 @@ public class NovelServlet extends HttpServlet {
         List<String> linesList = new ArrayList<>();
         try {
             linesList = Files.readAllLines(path, StandardCharsets.UTF_8);
-            for (String string : linesList) {
-                System.out.println(string);
-            }
             return linesList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -302,7 +299,6 @@ public class NovelServlet extends HttpServlet {
 
     public void createFolder(String novelID) {
         String path = getServletContext().getRealPath("") + "/novels/" + novelID;
-        System.out.println(path);
         File folder = new File(path);
         if (!folder.exists()) {
             folder.mkdir();
