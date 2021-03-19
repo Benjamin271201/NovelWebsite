@@ -75,6 +75,9 @@
                             </c:if>
                             <c:if test="${user.isAdmin == true || user.username.equals(novel.author.username)}">
                                 <p><a href="NovelServlet?a=del&nid=${novel.novelID}" onclick="return confirm('This action will remove all chapters in this novel.\nAre you sure ?')" class="del">Delete</a></p>
+                                <c:if test="${user.username.equals(novel.author.username)}">
+                                    <p><a href="NovelServlet?a=updateform&nid=${novel.novelID}" class="del">Update</a></p>
+                                </c:if>
                             </c:if>
                         </li>    
                     </c:forEach>
