@@ -47,7 +47,7 @@
                                                 <img src="${pageContext.request.contextPath}/images/avatars/${sessionScope.user.avatarURL}" alt="user" id="avatar">
                                                 <ul class="user-dropdown">
                                                         <li><a id="Manage" href="ManageAccountServlet">Manage Account</a></li>
-                                                        <li><a id="Logout" href="LoginServlet?action=logout">Logout</a></li>
+                                                        <li><a id="Logout" href="LoginServlet?action=logout" onclick="return confirm('Do you want to logout ?')">Logout</a></li>
                                                 </ul>
                                         </div>
                                 </c:otherwise>

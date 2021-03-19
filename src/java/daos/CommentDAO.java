@@ -178,11 +178,4 @@ public class CommentDAO {
         }
         return false;
     }
-    
-    public static void main(String[] args) {
-        CommentDAO dao = new CommentDAO();
-        LinkedList<Comment> lst = dao.getAllComments();
-        String s = "CM" + (Integer.parseInt(lst.getLast().getCommentID().substring(2)) + 2);
-        System.out.println(s);
-    }
 }
