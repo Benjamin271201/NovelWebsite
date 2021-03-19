@@ -70,7 +70,7 @@
                 <span>Name: ${novel.novelName}</span>
             </h2> 
             <div class="left-side">
-                <img src="${pageContext.request.contextPath}/images/covers/${novel.coverURL}" alt="Cover" id="cover"/>
+                <img class="cover" src="${pageContext.request.contextPath}/images/covers/${novel.coverURL}" alt="Cover" id="cover"/>
             </div>
             <div class="right-side">
                 <div class="content-row" id="author">

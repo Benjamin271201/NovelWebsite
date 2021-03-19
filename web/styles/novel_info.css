@@ -40,15 +40,21 @@ body {
 .left-side {
     float: left;
     width: 40%;
-    height: 31rem;
+    height: 29.5rem;
     border: 1px solid rgba(0, 0, 0, 0.125);
     border-radius: 0 0 calc(0.25rem - 1px) calc(0.25rem - 1px);
+}
+
+.cover {
+        width: 90%;
+        height: 100%;
+        object-fit: fill;
 }
 
 .right-side {
     float: left;
     width: 60%;
-    height: 31rem;
+    height: 29.5rem;
     border: 1px solid rgba(0, 0, 0, 0.125);
     border-radius: 0 0 calc(0.25rem - 1px) calc(0.25rem - 1px);
 }
@@ -61,7 +67,7 @@ body {
 
 #chap-list {
     padding: 14px 17px;
-    overflow: scroll;
+    overflow: auto;
 }
 
 .chapter-item {
@@ -110,11 +116,5 @@ body {
 .tag-item:hover {
     background-color: #ffffff;
     box-shadow: 0 0 5px;
-}
-
-#cover{
-    width: 269.16px;
-    height: 382.69px;
-    object-fit: fill;
 }
 
