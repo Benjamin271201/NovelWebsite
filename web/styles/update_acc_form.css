@@ -28,8 +28,13 @@ body {
 
 fieldset {
         width: 35%;
+        border-radius: 1rem;
         padding: 1% 1%;
         background-color: #ffffff;
+}
+
+legend {
+    margin-left: 5%;
 }
 
 .input {
