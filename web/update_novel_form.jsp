@@ -69,10 +69,7 @@
             </div>
             <div>
                 <label>Novel Name</label><br>
-                <input type="text" name="novelName" value="${nName}" id="novelName" class="input"/>
-                <c:if test="${ERROR != null}">
-                    <p style="color:red">${ERROR}</p>
-                </c:if>
+                <input type="text" name="novelName" value="${n.novelName}" id="novelName" class="input"/>
             </div>
             <div>
                 <label>Cover</label><br>
