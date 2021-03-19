@@ -61,6 +61,35 @@ public class NovelDAO {
         }
         return lst;
     }
+    
+    // update a novel based on novelID
+    public boolean updateNovel(Novel n) throws SQLException {
+        Connection con = null;
+                PreparedStatement ps = null;
+                String sql =  "UPDATE Novel SET name=?, author=?, coverURL=? WHERE novelID=?";
+                try {
+                        con = DBConnect.makeConnection();
+                        if(con != null) {
+                                ps = con.prepareStatement(sql);
+                                ps.setString(1, n.getNovelName());
+                                ps.setString(2, n.getAuthor().getUsername());
+                                ps.setString(3, n.getCoverURL());
+                                ps.setString(4, n.getNovelID());
+                                ps.executeUpdate();
+                                return true;
+                        }    
+                } catch (SQLException e) {
+                        e.printStackTrace();
+                } finally {
+                         if (ps != null) {
+                                ps.close();
+                        }
+                        if (con != null) {
+                                con.close();
+                        }
+                }
+                return false;
+    }
 
     //  get a novel based on novelID
     public Novel getNovel(String novelID) {

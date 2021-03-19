@@ -25,9 +25,12 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -61,7 +64,7 @@ public class NovelServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         String info = "novel_info.jsp";
@@ -192,8 +195,7 @@ public class NovelServlet extends HttpServlet {
                     String coverURL = getFileName(request.getPart("coverURL"));
                     if (coverURL.equals("")) {
                         coverURL = "defaultCover.png";
-                    }
-                    else{
+                    } else {
                         coverURL = this.uploadFile(request, novelID);
                     }
                     novelName = new String(novelName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
@@ -217,25 +219,48 @@ public class NovelServlet extends HttpServlet {
                 }
                 rd = request.getRequestDispatcher("index.jsp");
                 rd.forward(request, response);
-            }
-            else if(action.equals("del")){
+            } else if (action.equals("del")) {
                 String novelID = request.getParameter("nid");
                 Novel n = nDAO.getNovel(novelID);
-                if(n ==  null){
+                if (n == null) {
                     request.setAttribute("NOVELNOTFOUND", "Could not find this novel");
                     request.getRequestDispatcher("error.jsp").forward(request, response);
-                }
-                else{
-                    if(!n.getCoverURL().equals("defaultCover.png")){
+                } else {
+                    if (!n.getCoverURL().equals("defaultCover.png")) {
                         deleteCover(novelID);
                     }
                     nDAO.deleteNovel(n);
                     deleteFile(novelID);
                     response.sendRedirect("NovelServlet");
                 }
+            } else if (action.equals("update")) {
+                String novelID = request.getParameter("nid");
+                String novelName = request.getParameter("name");
+                String coverURL = getFileName(request.getPart("coverURL"));
+                Novel n = nDAO.getNovel(novelID);
+                if (n == null) {
+                    request.setAttribute("NOVELNOTFOUND", "Could not find this novel");
+                    request.getRequestDispatcher("error.jsp").forward(request, response);
+                } else {
+                    if (!n.getCoverURL().equals("defaultCover.png")) {
+                        deleteCover(novelID);
+                    } else {
+                        if (coverURL.equals("")) {
+                            coverURL = "defaultCover.png";
+                        } else {
+                            coverURL = this.uploadFile(request, novelID);
+                        }
+                        n = new Novel(novelID, novelName, (Account) session.getAttribute("user"), coverURL);
+                        nDAO.updateNovel(n);
+                        response.sendRedirect("NovelServlet");
+                    }
+                }
+            } else if(action.equals("updateform")) {
+                String nid = request.getParameter("nid");
+                Novel n = nDAO.getNovel(nid);
+                request.setAttribute("n", n);
+                request.getRequestDispatcher("update_novel_form.jsp").forward(request, response);
             }
-        } else {
-            response.sendRedirect("LoginServlet");
         }
     }
 
@@ -262,24 +287,26 @@ public class NovelServlet extends HttpServlet {
             folder.mkdir();
         }
     }
-    
-    public void deleteFile(String novelID) throws IOException{
+
+    public void deleteFile(String novelID) throws IOException {
         String filepath = getServletContext().getRealPath("") + "/novels/" + novelID;
         File directory = new File(filepath);
-        if(!directory.exists()){
+        if (!directory.exists()) {
             return;
-        }
-        else{
+        } else {
             FileUtils.cleanDirectory(directory);
             directory.delete();
         }
     }
-    
-    public void deleteCover(String novelID){
+
+    public void deleteCover(String novelID) {
         String filepath = getServletContext().getRealPath("") + "/images/covers/" + novelID + ".jpg";
         File file = new File(filepath);
-        if(!file.exists()) return;
-        else file.delete();
+        if (!file.exists()) {
+            return;
+        } else {
+            file.delete();
+        }
     }
 
     private String uploadFile(HttpServletRequest request, String novelID) throws IOException, ServletException {
@@ -339,7 +366,11 @@ public class NovelServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(NovelServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -353,7 +384,11 @@ public class NovelServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(NovelServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
