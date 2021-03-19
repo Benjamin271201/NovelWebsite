@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -48,6 +49,7 @@ public class ManageAccountServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
         String action = request.getParameter("a");
         HttpSession session = request.getSession(false);
         Account user = (Account) session.getAttribute("user");
@@ -88,6 +90,7 @@ public class ManageAccountServlet extends HttpServlet {
                     if(up == false){
                         request.setAttribute("UPDATEFAILDERROR", "Failed to update account");
                         request.getRequestDispatcher("error.jsp").forward(request, response);
+                        out.println(up);
                     }
                     else{
                         session.invalidate();
