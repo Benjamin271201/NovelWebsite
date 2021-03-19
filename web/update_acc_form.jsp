@@ -13,7 +13,7 @@
                 <title>Update</title>
                 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
                 <link rel="stylesheet" href="styles/index.css"/>
-                <link rel ="stylesheet" href="styles/register.css"/>
+                <link rel ="stylesheet" href="styles/update_acc_form.css"/>
         </head>
         <body>
                 <div class="navbar">
@@ -65,31 +65,31 @@
                                 <legend><h1>Update Info</h1></legend>
                                 <div>
                                         <label>Username</label><br>
-                                        <input type="text" name="username" value="${user.username}" id="username" readonly/>
+                                        <input type="text" name="username" value="${user.username}" id="username" class="input" readonly/>
                                 </div>
                                 <br>
                                 <div>
                                         <label>Full name</label><br>
-                                        <input type="text" name="name" value="${user.name}" id="name"/>
+                                        <input type="text" name="name" value="${user.name}" class="input"  id="name"/>
                                 </div>
                                 <div id="nameMsg" style="visibility:hidden" class="error">
                                         Full name can not be empty
                                 </div>
                                 <div>
                                         <label>Email</label><br>
-                                        <input type="text" name="email" value="${user.email}" id="email" readonly/>
+                                        <input type="text" name="email" value="${user.email}" class="input"  id="email" readonly/>
                                 </div>
                                 <br>
                                 <div>
                                         <label>Password</label><br>
-                                        <input type="password" name="password" id="password" value="${user.password}"/>
+                                        <input type="password" name="password" class="input"  id="password" value="${user.password}"/>
                                 </div>
                                 <div id="passMsg" style="visibility:hidden" class="error">
                                         Password can only be of length 5 to 32 characters
                                 </div>
                                 <div>
                                         <label>Confirm password</label><br>
-                                        <input type="password" name="conpass" id="confpassword" value=""/>
+                                        <input type="password" name="conpass" class="input" id="confpassword" value=""/>
                                 </div>
                                 <div id="confpassMsg" style="visibility:hidden" class="error">
                                         Confirm password did not match
