@@ -37,7 +37,7 @@
             <c:choose>
                 <c:when test="${sessionScope.user == null}">
                     <div class="login">
-                        <button><a href="LoginServlet" class="login-btn">Login</a></button>
+                        <button class="login-btn"><a href="LoginServlet">Login</a></button>
                     </div>
                 </c:when>
                 <c:otherwise>
@@ -61,7 +61,7 @@
         <c:set var="user" value="${sessionScope.user}"></c:set>
             <div class="n-container">
             <c:if test="${tag != null}">
-                <h1>Category: ${tag.tagName}</h1>
+                <h1 style="margin-left: 2%;">Category: ${tag.tagName}</h1>
             </c:if>
             <c:if test="${novelListObj != null}">
                 <ul class="n-list">
