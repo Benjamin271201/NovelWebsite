@@ -111,9 +111,9 @@ public final class account_005finfo_jsp extends org.apache.jasper.runtime.HttpJs
         return;
       out.write("\r\n");
       out.write("            <div class=\"search-container\">\r\n");
-      out.write("                <form action=\"search\" method=\"post\">\r\n");
+      out.write("                <form action=\"NovelServlet\" method=\"post\">\r\n");
       out.write("                    <input type=\"hidden\" name=\"a\" value=\"searchname\"/>\r\n");
-      out.write("                    <input type=\"text\" placeholder=\"Search..\" id=\"search-bar\">\r\n");
+      out.write("                    <input type=\"text\" placeholder=\"Search..\" id=\"search-bar\" name=\"nameSearch\">\r\n");
       out.write("                    <button id=\"search-btn\" type=\"submit\"><i class=\"fa fa-search\"></i></button>\r\n");
       out.write("                </form>\r\n");
       out.write("            </div>\r\n");
