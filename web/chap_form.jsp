@@ -29,7 +29,7 @@
                         </div>
                         <div class="footer">
                                 <input id="add" type='submit' value='Add'/>
-                                <button id="cancel"><a href='NovelServlet?a=display' style='text-decoration: none; color:#000000'>Cancel</a></button>
+                                <button id="cancel"><a href='NovelServlet' style='text-decoration: none; color:#000000'>Cancel</a></button>
                         </div>
                 </form>
                 <script defer>
