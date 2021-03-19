@@ -74,7 +74,7 @@
                                 <a href="ChapterServlet?a=addchapform&nid=${novel.novelID}">Add a new Chapter</a>
                             </c:if>
                             <c:if test="${user.isAdmin == true || user.username.equals(novel.author.username)}">
-                                <p><a href="NovelServlet?a=del&nid=${novel.novelID}" onclick="return confirm('This action will remove all chapters in this novel.\nAre you sure ?')">Delete</a></p>
+                                <p><a href="NovelServlet?a=del&nid=${novel.novelID}" onclick="return confirm('This action will remove all chapters in this novel.\nAre you sure ?')" class="del">Delete</a></p>
                             </c:if>
                         </li>    
                     </c:forEach>
