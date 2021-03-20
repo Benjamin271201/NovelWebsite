@@ -76,17 +76,6 @@
                 <input type="file" name="coverURL"/>
             </div>
             <div>
-                <label>Tags</label>
-                <div class="tagTable">
-                    <c:forEach items="${applicationScope.tagListObj}" var="tag">
-                        <span class="tag-item">
-                            <label for="${tag.tagID}" class="tagname">${tag.tagName}</label>
-                            <input type="checkbox" class="tagItem" style="border: 1px solid black; visibility: hidden" name="tag" value="${tag.tagID}" id="${tag.tagID}"/>
-                        </span>
-                    </c:forEach>
-                </div>
-            </div>
-            <div>
                 <input type="submit" value="Update" id="submitBtn"/>
                 <button type="button" id="cancel"><a href="NovelServlet">Cancel</a></button>
             </div>
