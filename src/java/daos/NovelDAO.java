@@ -214,12 +214,12 @@ public class NovelDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
         ArrayList<Novel> lst = new ArrayList<>();
-        String sql = "SELECT * FROM Novel WHERE name=?";
+        String sql = "SELECT * FROM Novel WHERE name LIKE '%" + name + "%'";
         try {
             con = DBConnect.makeConnection();
             if (con != null) {
                 ps = con.prepareStatement(sql);
-                ps.setString(1, name);
+//                ps.setString(1, name);
                 rs = ps.executeQuery();
                 while (rs.next()) {
                     String novelID = rs.getString("novelID");
@@ -416,5 +416,14 @@ public class NovelDAO {
             }
         }
         return false;
+    }
+    
+    public static void main(String[] args) {
+        NovelDAO dao = new NovelDAO();
+        ArrayList<Novel> lst = dao.searchNovelByName("god");
+        for (Novel novel : lst) {
+            System.out.println(novel.getNovelID());
+        }
+
     }
 }

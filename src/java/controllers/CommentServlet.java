@@ -38,25 +38,28 @@ public class CommentServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         String action = request.getParameter("a");
-        if(action==null){
-            CommentDAO cmDAO = new CommentDAO();
-            HttpSession session = request.getSession(false);
-            Account user = (Account) session.getAttribute("user");
-            String chapterID = request.getParameter("chapterID");
-            String novelID = request.getParameter("novelID");
-            String context =request.getParameter("context");
-            context = new String(context.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-            cmDAO.addComment(user.getUsername(), context, chapterID, novelID);
-            response.sendRedirect("NovelServlet?a=read&n=" + novelID + "&c=" + chapterID);
+        HttpSession session = request.getSession(false);
+        if (session.getAttribute("user") == null) {
+            response.sendRedirect("LoginServlet");
+        } else {
+            if (action == null) {
+                CommentDAO cmDAO = new CommentDAO();
+                Account user = (Account) session.getAttribute("user");
+                String chapterID = request.getParameter("chapterID");
+                String novelID = request.getParameter("novelID");
+                String context = request.getParameter("context");
+                context = new String(context.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                cmDAO.addComment(user.getUsername(), context, chapterID, novelID);
+                response.sendRedirect("NovelServlet?a=read&n=" + novelID + "&c=" + chapterID);
 //            out.print(context);
-        }
-        else if(action.equals("delete")){
-            CommentDAO cmDAO = new CommentDAO();
-            String commentID = request.getParameter("cmid");
-            String novelID = request.getParameter("nid");
-            String chapterID = request.getParameter("cid");
-            cmDAO.deleteComment(commentID);
-            response.sendRedirect("NovelServlet?a=read&n=" + novelID + "&c=" + chapterID);
+            } else if (action.equals("delete")) {
+                CommentDAO cmDAO = new CommentDAO();
+                String commentID = request.getParameter("cmid");
+                String novelID = request.getParameter("nid");
+                String chapterID = request.getParameter("cid");
+                cmDAO.deleteComment(commentID);
+                response.sendRedirect("NovelServlet?a=read&n=" + novelID + "&c=" + chapterID);
+            }
         }
     }
 

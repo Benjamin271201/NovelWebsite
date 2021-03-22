@@ -166,121 +166,125 @@ public class NovelServlet extends HttpServlet {
             request.setAttribute("chapterlist", chapterList);
             request.setAttribute("novel", novelInfo);
             rd.forward(request, response);
-        } else if (session.getAttribute("user") != null) {
-            Account user = (Account) session.getAttribute("user");
-            if (action.equals("n_form")) {
-                response.sendRedirect("insert_novel_form.jsp");
-            } else if (action.equals("n_add")) {
-                String novelName = request.getParameter("novelName");
-                ArrayList<Novel> nList = nDAO.getAllNovels();
-                String[] tagNameList = request.getParameterValues("tag");
-                if (tagNameList == null || tagNameList.length > 5) {
-                    request.setAttribute("TAGERROR", "Please choose between 1 and 5 tags only");
-                    request.setAttribute("novelName", novelName);
-                    request.getRequestDispatcher("insert_novel_form.jsp").forward(request, response);
-                } else if (nDAO.getNovelByNameAndUsername(novelName, user.getUsername()) != null) {
-                    Novel dupNovel = nDAO.getNovelByNameAndUsername(novelName, user.getUsername());
-                    request.setAttribute("DUPLICATEDNOVELERROR", "This Novel name has already been added by you. Do you want to add a chapter to this novel ?");
-                    request.setAttribute("dupNovelObj", dupNovel);
-                    request.setAttribute("novelName", novelName);
-                    request.getRequestDispatcher("insert_novel_form.jsp").forward(request, response);
-                } else {
-                    String novelID = "N1";
-                    for (Novel novel : nList) {
-                        if (novel.getNovelID().equalsIgnoreCase(novelID)) {
-                            novelID = "N" + (Integer.parseInt(novelID.substring(1)) + 1);
-                        }
-                    }
-                    String coverURL = getFileName(request.getPart("coverURL"));
-                    if (coverURL.equals("")) {
-                        coverURL = "defaultCover.png";
+        } else {
+            if (session.getAttribute("user") == null) {
+                response.sendRedirect("LoginServlet");
+            } else {
+                Account user = (Account) session.getAttribute("user");
+                if (action.equals("n_form")) {
+                    response.sendRedirect("insert_novel_form.jsp");
+                } else if (action.equals("n_add")) {
+                    String novelName = request.getParameter("novelName");
+                    ArrayList<Novel> nList = nDAO.getAllNovels();
+                    String[] tagNameList = request.getParameterValues("tag");
+                    if (tagNameList == null || tagNameList.length > 5) {
+                        request.setAttribute("TAGERROR", "Please choose between 1 and 5 tags only");
+                        request.setAttribute("novelName", novelName);
+                        request.getRequestDispatcher("insert_novel_form.jsp").forward(request, response);
+                    } else if (nDAO.getNovelByNameAndUsername(novelName, user.getUsername()) != null) {
+                        Novel dupNovel = nDAO.getNovelByNameAndUsername(novelName, user.getUsername());
+                        request.setAttribute("DUPLICATEDNOVELERROR", "This Novel name has already been added by you. Do you want to add a chapter to this novel ?");
+                        request.setAttribute("dupNovelObj", dupNovel);
+                        request.setAttribute("novelName", novelName);
+                        request.getRequestDispatcher("insert_novel_form.jsp").forward(request, response);
                     } else {
-                        coverURL = this.uploadFile(request, novelID);
-                    }
-                    novelName = new String(novelName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-                    Novel newNovel = new Novel(novelID, novelName, user, coverURL);
-                    nDAO.addNovel(newNovel);
-                    createFolder(novelID);
-                    for (String string : tagNameList) {
-                        nDAO.addTagMap(novelID, string);
-                    }
-                    response.sendRedirect("NovelServlet");
-                }
-            } else if (action.equals("display")) {
-                String username = request.getParameter("u");
-                ArrayList<Novel> lst = nDAO.getUserNovels(username);
-                if (lst.size() > 0) {
-                    request.setAttribute("addFlag", "addFlag");
-                    request.setAttribute("novelListObj", lst);
-                } else {
-                    request.setAttribute("NONOVELERROR", "No novels could be found");
-                    request.setAttribute("flag", "");
-                }
-                rd = request.getRequestDispatcher("index.jsp");
-                rd.forward(request, response);
-            } else if (action.equals("del")) {
-                String novelID = request.getParameter("nid");
-                Novel n = nDAO.getNovel(novelID);
-                if (n == null) {
-                    request.setAttribute("NOVELNOTFOUND", "Could not find this novel");
-                    request.getRequestDispatcher("error.jsp").forward(request, response);
-                } else {
-                    if (!n.getCoverURL().equals("defaultCover.png")) {
-                        deleteCover(novelID);
-                    }
-                    nDAO.deleteNovel(n);
-                    deleteFile(novelID);
-                    response.sendRedirect("NovelServlet");
-                }
-            } else if (action.equals("update")) {
-                String novelID = request.getParameter("nid");
-                String novelName = request.getParameter("novelName");
-                novelName = new String(novelName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-                String coverURL = this.getFileName(request.getPart("coverURL"));
-                Novel n = nDAO.getNovel(novelID);
-                Novel no = null;
-                ArrayList<Novel> nLst = nDAO.getUserNovels(user.getUsername());
-                if (novelName.equals("")) {
-                    request.setAttribute("ERROR", "Novel Name can not be empty");
-                    request.setAttribute("n", n);
-                    request.setAttribute("nName", novelName);
-                    request.getRequestDispatcher("update_novel_form.jsp").forward(request, response);
-                } else {
-                    for (Novel novel : nLst) {
-                        if (!novel.getNovelID().equals(n.getNovelID()) && novel.getNovelName().equalsIgnoreCase(novelName)) {
-                            no = new Novel();
-                            no = novel;
+                        String novelID = "N1";
+                        for (Novel novel : nList) {
+                            if (novel.getNovelID().equalsIgnoreCase(novelID)) {
+                                novelID = "N" + (Integer.parseInt(novelID.substring(1)) + 1);
+                            }
                         }
+                        String coverURL = getFileName(request.getPart("coverURL"));
+                        if (coverURL.equals("")) {
+                            coverURL = "defaultCover.png";
+                        } else {
+                            coverURL = this.uploadFile(request, novelID);
+                        }
+                        novelName = new String(novelName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                        Novel newNovel = new Novel(novelID, novelName, user, coverURL);
+                        nDAO.addNovel(newNovel);
+                        createFolder(novelID);
+                        for (String string : tagNameList) {
+                            nDAO.addTagMap(novelID, string);
+                        }
+                        response.sendRedirect("NovelServlet");
                     }
-                    if (no != null) {
-                        request.setAttribute("ERROR", "This Novel Name has been used by another Novel create by you");
+                } else if (action.equals("display")) {
+                    String username = request.getParameter("u");
+                    ArrayList<Novel> lst = nDAO.getUserNovels(username);
+                    if (lst.size() > 0) {
+                        request.setAttribute("addFlag", "addFlag");
+                        request.setAttribute("novelListObj", lst);
+                    } else {
+                        request.setAttribute("NONOVELERROR", "No novels could be found");
+                        request.setAttribute("flag", "");
+                    }
+                    rd = request.getRequestDispatcher("index.jsp");
+                    rd.forward(request, response);
+                } else if (action.equals("del")) {
+                    String novelID = request.getParameter("nid");
+                    Novel n = nDAO.getNovel(novelID);
+                    if (n == null) {
+                        request.setAttribute("NOVELNOTFOUND", "Could not find this novel");
+                        request.getRequestDispatcher("error.jsp").forward(request, response);
+                    } else {
+                        if (!n.getCoverURL().equals("defaultCover.png")) {
+                            deleteCover(novelID);
+                        }
+                        nDAO.deleteNovel(n);
+                        deleteFile(novelID);
+                        response.sendRedirect("NovelServlet");
+                    }
+                } else if (action.equals("update")) {
+                    String novelID = request.getParameter("nid");
+                    String novelName = request.getParameter("novelName");
+                    novelName = new String(novelName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                    String coverURL = this.getFileName(request.getPart("coverURL"));
+                    Novel n = nDAO.getNovel(novelID);
+                    Novel no = null;
+                    ArrayList<Novel> nLst = nDAO.getUserNovels(user.getUsername());
+                    if (novelName.equals("")) {
+                        request.setAttribute("ERROR", "Novel Name can not be empty");
                         request.setAttribute("n", n);
                         request.setAttribute("nName", novelName);
                         request.getRequestDispatcher("update_novel_form.jsp").forward(request, response);
                     } else {
-                        if (coverURL.equals("")) {
-                            coverURL = n.getCoverURL();
-                        } else {
-                            if (!n.getCoverURL().equals("defaultCover.png")) {
-                                deleteCover(novelID);
+                        for (Novel novel : nLst) {
+                            if (!novel.getNovelID().equals(n.getNovelID()) && novel.getNovelName().equalsIgnoreCase(novelName)) {
+                                no = new Novel();
+                                no = novel;
                             }
-                            coverURL = uploadFile(request, n.getNovelID());
                         }
-                        n = new Novel(novelID, novelName, user, coverURL);
-                        nDAO.updateNovel(n);
-                        response.sendRedirect("NovelServlet");
+                        if (no != null) {
+                            request.setAttribute("ERROR", "This Novel Name has been used by another Novel create by you");
+                            request.setAttribute("n", n);
+                            request.setAttribute("nName", novelName);
+                            request.getRequestDispatcher("update_novel_form.jsp").forward(request, response);
+                        } else {
+                            if (coverURL.equals("")) {
+                                coverURL = n.getCoverURL();
+                            } else {
+                                if (!n.getCoverURL().equals("defaultCover.png")) {
+                                    deleteCover(novelID);
+                                }
+                                coverURL = uploadFile(request, n.getNovelID());
+                            }
+                            n = new Novel(novelID, novelName, user, coverURL);
+                            nDAO.updateNovel(n);
+                            response.sendRedirect("NovelServlet");
+                        }
                     }
+                } else if (action.equals("updateform")) {
+                    String nid = request.getParameter("nid");
+                    Novel n = nDAO.getNovel(nid);
+                    if (n == null) {
+                        request.setAttribute("NOVELNOTFOUND", "Could not find this novel");
+                        request.getRequestDispatcher("error.jsp").forward(request, response);
+                    }
+                    request.setAttribute("n", n);
+                    request.setAttribute("nName", n.getNovelName());
+                    request.getRequestDispatcher("update_novel_form.jsp").forward(request, response);
                 }
-            } else if (action.equals("updateform")) {
-                String nid = request.getParameter("nid");
-                Novel n = nDAO.getNovel(nid);
-                if (n == null) {
-                    request.setAttribute("NOVELNOTFOUND", "Could not find this novel");
-                    request.getRequestDispatcher("error.jsp").forward(request, response);
-                }
-                request.setAttribute("n", n);
-                request.setAttribute("nName", n.getNovelName());
-                request.getRequestDispatcher("update_novel_form.jsp").forward(request, response);
             }
         }
     }

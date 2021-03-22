@@ -25,7 +25,7 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "BookmarkServlet", urlPatterns = {"/BookmarkServlet"})
 public class BookmarkServlet extends HttpServlet {
-   
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,7 +39,7 @@ public class BookmarkServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession(false);
             Account user = (Account) session.getAttribute("user");
             String novelID = request.getParameter("id");
             String SUCCESS = "NovelServlet";
@@ -47,35 +47,34 @@ public class BookmarkServlet extends HttpServlet {
             BookmarkDAO bdao = new BookmarkDAO();
             NovelDAO ndao = new NovelDAO();
             String action = request.getParameter("a");
-            
-            //  action == null -> add/remove bookmark of a novel
-            if (action == null) {
-                if (user != null) {
-                    if (bdao.bookmarkHandler(user.getUsername(), novelID)) {
-                        request.getRequestDispatcher("NovelServlet?a=novel_info&n=" + novelID).forward(request, response);
+            if (user == null) {
+                response.sendRedirect("LoginServlet");
+            } else {
+                //  action == null -> add/remove bookmark of a novel
+                if (action == null) {
+                    if (user != null) {
+                        if (bdao.bookmarkHandler(user.getUsername(), novelID)) {
+                            request.getRequestDispatcher("NovelServlet?a=novel_info&n=" + novelID).forward(request, response);
+                        } else {
+                            response.sendRedirect(ERROR);
+                        }
+                    } else {
+                        response.sendRedirect("login_form.jsp");
                     }
-                    else {
-                        response.sendRedirect(ERROR);
+                } else if (action.equals("bookmark_list")) {
+                    ArrayList<String> idList = bdao.getBookmarkIDList(user);
+                    ArrayList<Novel> nList = ndao.getNovelListByID(idList);
+                    if (nList.size() > 0) {
+                        request.setAttribute("novelListObj", nList);
+                        request.setAttribute("BOOKMARKFLAG", "Your Bookmarks");
+                    } else {
+                        request.setAttribute("EMPTYBOOKMARK", "You haven't bookmarked any novel yet!");
+                        request.setAttribute("flag", "");
                     }
-                }
-                else {
-                    response.sendRedirect("login_form.jsp");
+                    request.getRequestDispatcher("index.jsp").forward(request, response);
                 }
             }
-            else if (action.equals("bookmark_list")) {
-                ArrayList<String> idList = bdao.getBookmarkIDList(user);
-                ArrayList<Novel> nList = ndao.getNovelListByID(idList);
-                if (nList.size() > 0) {
-                    request.setAttribute("novelListObj", nList);
-                    request.setAttribute("BOOKMARKFLAG", "Your Bookmarks");
-                } else {
-                    request.setAttribute("EMPTYBOOKMARK", "You haven't bookmarked any novel yet!");
-                    request.setAttribute("flag", "");
-                }
-                request.getRequestDispatcher("index.jsp").forward(request, response);     
-            }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
