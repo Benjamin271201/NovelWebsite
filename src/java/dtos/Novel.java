@@ -5,9 +5,6 @@
  */
 package dtos;
 
-import java.sql.Date;
-import java.util.ArrayList;
-
 /**
  *
  * @author chiuy

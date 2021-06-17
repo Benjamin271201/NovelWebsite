@@ -25,7 +25,7 @@ public class DBConnect {
             // 2
             /*Tạo đối tượng kết nối CSDL*/
             String url = "jdbc:sqlserver://localhost:1433;databaseName=PRJ301_Assignment_G5";
-            Connection c = DriverManager.getConnection(url, "", "");  // Ba tham số: url, username và password
+            Connection c = DriverManager.getConnection(url, "SE151055", "tt271201");  // Ba tham số: url, username và password
             return c;
         }
         catch (ClassNotFoundException e) {
