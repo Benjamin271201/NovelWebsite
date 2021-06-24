@@ -26,6 +26,8 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "BookmarkServlet", urlPatterns = {"/BookmarkServlet"})
 public class BookmarkServlet extends HttpServlet {
 
+    private String test = "test";
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
